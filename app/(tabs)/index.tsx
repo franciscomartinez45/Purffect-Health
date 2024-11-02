@@ -1,5 +1,5 @@
 import {AddPetModal} from "../../components/AddPetModal"
-import { ShowPets } from "@/app/(tabs)/Profiles";
+import { ShowPets } from "@/components/PetProfiles";
 import RoundButton from "@/components/styles/roundButton";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
