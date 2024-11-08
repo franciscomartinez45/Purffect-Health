@@ -1,63 +1,111 @@
-import { getAuth } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { Alert,  Button,  StyleSheet } from "react-native";
-import { db } from "../../firebaseConfig";
-import { Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, Linking, TouchableOpacity } from 'react-native';
+import MapView, { Marker, Callout } from 'react-native-maps';
+import { search } from '@/serpService'; 
+import { mapStyles } from '@/components/styles/styles';
 
+export default function profileScreen() {
+  const [results, setResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [region, setRegion] = useState({
+    latitude: 33.827820,
+    longitude: -118.272346,
+    latitudeDelta: 0.1,
+    longitudeDelta: 0.1,
+  });
 
-interface UserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+  const [selectedPlace, setSelectedPlace] = useState<any>(null);
 
-
-export default function TabTwoScreen() {
-
-
-  const { currentUser } = getAuth();
-  const [userData, setUserData] = useState<UserData | null>(null);
- 
-
-  const getUserData = async () => {
-    if (currentUser) {
-      const profileData = await getDoc(doc(db, "user", currentUser.uid));
-      if (profileData.exists()) {
-        setUserData(profileData.data() as UserData);
-      }
-    }
-  };
   useEffect(() => {
-    getUserData();
-  }, []);
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>First Name: {userData?.firstName}</Text>
-      <Text style={styles.title}>Last Name: {userData?.lastName}</Text>
-      <Text style={styles.title}>Email: {userData?.email}</Text>
-      <View>
+    const fetchData = async () => {
+      setLoading(true);
+      const location = '@33.827820,-118.272346,14z'; 
+      const data = await search(location);
+      const sortedResults = (data?.local_results || []).sort((a: { rating: number; }, b: { rating: number; }) => b.rating - a.rating);
+      setResults(sortedResults);
+      setLoading(false);
+    };
 
+    fetchData();
+  }, []);
+
+    const openDirections = (latitude: number, longitude: number) => {
+    const latitudeString = latitude.toString();
+    const longitudeString = longitude.toString();
+    const url = `http://maps.apple.com/?daddr=${latitudeString},${longitudeString}`;
+    Linking.openURL(url).catch((err) => console.error(err));
+  };
+
+  const handleFlatListItemPress = (place: any) => {
+    setSelectedPlace(place);
+    setRegion({
+      latitude: place.gps_coordinates.latitude,
+      longitude: place.gps_coordinates.longitude,
+      latitudeDelta: 0.1,
+      longitudeDelta: 0.1,
+    });
+  };
+
+  if (loading) {
+    return (
+      <View style={mapStyles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
       </View>
+    );
+  }
+
+  return (
+    <View style={mapStyles.container}>
+      <MapView
+        style={mapStyles.map}
+        region={region} 
+        onRegionChangeComplete={(newRegion) => setRegion(newRegion)} 
+      >
+        {results.map((item) => (
+          <Marker
+            key={item.place_id}
+            coordinate={{
+              latitude: item.gps_coordinates.latitude,
+              longitude: item.gps_coordinates.longitude,
+            }}
+            title={item.title}
+            description={item.address}
+            pinColor={selectedPlace?.place_id === item.place_id ? 'green' : 'red'} 
+            onPress={() => setSelectedPlace(item)} 
+          >
+            <Callout>
+              <View style={mapStyles.calloutContainer}>
+                <Text style={mapStyles.calloutTitle}>{item.title}</Text>
+                <Text style={mapStyles.calloutText}>{item.address}</Text>
+                <Text style={mapStyles.calloutText}>Rating: {item.rating} stars</Text>
+
+                <TouchableOpacity
+                  style={mapStyles.directionsButton}
+                  onPress={() => openDirections(item.gps_coordinates.latitude, item.gps_coordinates.longitude)}
+                >
+                  <Text style={mapStyles.directionsButtonText}>Get Directions</Text>
+                </TouchableOpacity>
+              </View>
+            </Callout>
+          </Marker>
+        ))}
+      </MapView>
+
+      <FlatList
+        data={results}
+        keyExtractor={(item) => item.place_id}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => handleFlatListItemPress(item)}>
+            <View style={mapStyles.resultItem}>
+              <Text>{item.title}</Text>
+              <Text>{item.address}</Text>
+              <Text>{item.rating} stars</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+        style={mapStyles.list}
+      />
     </View>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});
-
+};
 

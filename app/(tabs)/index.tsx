@@ -1,6 +1,6 @@
 import {AddPetModal} from "../../components/AddPetModal"
 import { ShowPets } from "@/components/PetProfiles";
-import RoundButton from "@/components/styles/roundButton";
+import {RoundButton} from "@/components/roundButton";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet } from "react-native";

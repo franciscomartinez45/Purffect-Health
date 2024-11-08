@@ -1,70 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { collection, getDocs, onSnapshot } from 'firebase/firestore';
-import { db } from '@/firebaseConfig'; // Import your initialized Firestore database
+import { db } from '@/firebaseConfig'; 
 import { getAuth } from 'firebase/auth';
+import { calendarStyles, styles } from './styles/styles';
 
 interface Reminder {
-  date: string; // The date string in ISO format
-  description: string; // The description of the reminder
+  date: string; 
+  description: string;
+  petName: string;
 }
-
-
 
 interface RemindersByDate {
-  [date: string]: string[]; // Date string (YYYY-MM-DD) mapped to an array of reminders
+  [date: string]: { petName: string; description: string }[]; 
 }
 
-const PetCalendar: React.FC = () => {
+export const PetCalendar = () => {
   const [reminders, setReminders] = useState<RemindersByDate>({});
-  const [selectedDate, setSelectedDate] = useState<string | null>(null); // State for the selected date
-  const auth = getAuth();
-
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const { currentUser } = getAuth();
+  
   useEffect(() => {
-    const fetchReminders = async () => {
-      const user = auth.currentUser;
+    const getReminders = async () => {
+      if (currentUser) {
+        const petsCollection = collection(db, `user/${currentUser.uid}/pets`);
+        const unsubscribe = onSnapshot(petsCollection, async (snapshot) => {
+          const remindersData: RemindersByDate = {};
 
-      if (!user) {
-        console.log("User is not authenticated");
-        return; // Exit if user is not authenticated
+          for (const petDoc of snapshot.docs) {
+            const petName = petDoc.data().name; // Get the pet's name
+            const remindersCollection = collection(petsCollection, petDoc.id, 'reminders');
+            const remindersSnapshot = await getDocs(remindersCollection);
+
+            remindersSnapshot.forEach(doc => {
+              const data = doc.data() as Reminder;
+              const date = new Date(data.date).toISOString().split('T')[0]; 
+              const reminderDescription = data.description;
+
+              if (!remindersData[date]) {
+                remindersData[date] = [];
+              }
+              remindersData[date].push({ petName, description: reminderDescription });
+            });
+          }
+
+          setReminders(remindersData);
+        });
+
+        return () => unsubscribe(); 
       }
-
-      const petsCollection = collection(db, `user/${user.uid}/pets`);
-      const unsubscribe = onSnapshot(petsCollection, async (snapshot) => {
-        const remindersData: RemindersByDate = {};
-
-        // Loop through each pet document
-        for (const petDoc of snapshot.docs) {
-          const remindersCollection = collection(petsCollection, petDoc.id, 'reminders');
-          const remindersSnapshot = await getDocs(remindersCollection);
-
-          // Loop through each reminder document
-          remindersSnapshot.forEach(doc => {
-            const data = doc.data() as Reminder;
-            const date = new Date(data.date).toISOString().split('T')[0]; // Format date as 'YYYY-MM-DD'
-            const reminderDescription = data.description;
-
-            // Initialize the date array if not already present
-            if (!remindersData[date]) {
-              remindersData[date] = [];
-            }
-            remindersData[date].push(reminderDescription);
-          });
-        }
-
-        setReminders(remindersData);
-      });
-
-      return () => unsubscribe(); // Cleanup function to unsubscribe from the listener
     };
-
-    fetchReminders();
-  }, [auth]);
+    getReminders();
+  }, []);
 
   const onDayPress = (day: { dateString: string }) => {
-    setSelectedDate(day.dateString); 
-    console.log(selectedDate);
+    setSelectedDate(day.dateString);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedDate(null);
   };
 
   return (
@@ -72,40 +70,38 @@ const PetCalendar: React.FC = () => {
       <Calendar
         style={styles.calendar}
         markedDates={Object.keys(reminders).reduce((acc, date) => {
-          acc[date] = { marked: true, dotColor: 'blue' };
+          acc[date] = { marked: true, dotColor: 'red' };
           return acc;
         }, {} as Record<string, { marked: boolean; dotColor: string }>)}
-        onDayPress={(day: any) => {
-    onDayPress(day);
-  }}
+        onDayPress={(day: { dateString: string; }) => onDayPress(day)}
       />
+
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        animationType="slide"
+        onRequestClose={closeModal}
+      >
+        <View style={calendarStyles.modalOverlay}>
+          <View style={calendarStyles.modalContainer}>
+            <Text style={calendarStyles.modalTitle}>Reminders for {selectedDate}</Text>
+            <ScrollView style={calendarStyles.remindersList}>
+              {selectedDate && reminders[selectedDate]?.length ? (
+                reminders[selectedDate].map((reminder, index) => (
+                  <Text key={index} style={calendarStyles.reminderText}>
+                    • {reminder.petName}: {reminder.description}
+                  </Text>
+                ))
+              ) : (
+                <Text style={calendarStyles.noRemindersText}>No reminders for this date.</Text>
+              )}
+            </ScrollView>
+            <TouchableOpacity style={calendarStyles.closeButton} onPress={closeModal}>
+              <Text style={calendarStyles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  calendarContainer: {
-    flex: 1,
-    padding: 10,
-  },
-  calendar: {
-    width: '100%',
-    height: 400,
-  },
-  reminderList: {
-    marginTop: 20,
-  },
-  dateText: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  reminderText: {
-    fontSize: 14,
-  },
-  noReminderText: {
-    fontSize: 14,
-    color: 'gray',
-  },
-});
-
-export default PetCalendar;

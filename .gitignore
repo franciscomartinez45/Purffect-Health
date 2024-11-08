@@ -5,7 +5,8 @@ node_modules/
 
 firebaseConfig.js
 
-
+eas.json
+serpService.ts
 # Expo
 .expo/
 dist/

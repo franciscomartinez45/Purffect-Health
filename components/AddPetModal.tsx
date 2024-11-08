@@ -8,14 +8,15 @@ import {
   StyleSheet,
   Alert,
   Image,
+  TouchableOpacity,
+  Keyboard,
 } from "react-native";
-
-import loginStyles from "./styles/loginRegister";
+import { loginStyles } from "./styles/styles";
 import { getAuth } from "firebase/auth";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig.js";
 import * as ImagePicker from 'expo-image-picker';
-
+import { styles } from "./styles/styles";
 interface AddPetModalProps {
   visible: boolean;
   onClose: () => void;
@@ -38,10 +39,11 @@ export const AddPetModal = (props: AddPetModalProps) => {
         Alert.alert("Missing data", "Age or Weight not specified", [{ text: "OK" }]);
         return;
       }
-        if (!image) {
-        Alert.alert("Missing data", "Image for {petName} no set", [{ text: "OK" }]);
+      
+      if (!image){
+      Alert.alert("Missing data", "Pet picture is requires, please retry", [{ text: "OK" }]);
         return;
-      }
+    }
    
       try {
         const reminder = {
@@ -61,14 +63,12 @@ export const AddPetModal = (props: AddPetModalProps) => {
       } catch (err) {
         console.error("Error adding reminder:", err);
       }
-    } else {
-      console.log("No user is logged in.");
-    }
+    } 
   };
 
 
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
+    
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -76,14 +76,15 @@ export const AddPetModal = (props: AddPetModalProps) => {
       quality: 1,
     });
 
-    console.log(result);
+   
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
   };
-  //   const addPet(){}
+
   const handleAddPet = () => {
+    
     addPet();
     setImage(null);
     setPetName("");
@@ -91,11 +92,19 @@ export const AddPetModal = (props: AddPetModalProps) => {
     setAge("");
     props.onClose();
   };
+  const handleOnClose = ()=>{
+    setImage(null);
+    setPetName("");
+    setWeight("");
+    setAge("");
+    props.onClose();
+  }
 
   return (
    <Modal visible={props.visible} animationType="slide" transparent={true}>
-      <View style={styles.modalContainer}>
+      <View style={styles.modalAddContainer}>
         <View style={styles.modalContent}>
+          {image && <Image source={{ uri: image }} style={styles.image} />}
           <Text style={styles.modalTitle}>Add New Pet</Text>
 
           <TextInput
@@ -104,6 +113,8 @@ export const AddPetModal = (props: AddPetModalProps) => {
             onChangeText={setPetName}
             style={loginStyles.input}
             placeholderTextColor={"black"}
+            returnKeyType="done"
+            returnKeyLabel="Done"
           />
           <TextInput
             placeholder="Age"
@@ -112,6 +123,7 @@ export const AddPetModal = (props: AddPetModalProps) => {
             style={loginStyles.input}
             keyboardType="numeric"
             placeholderTextColor={"black"}
+             returnKeyType="done"
           />
           <TextInput
             placeholder="Weight"
@@ -119,17 +131,23 @@ export const AddPetModal = (props: AddPetModalProps) => {
             onChangeText={setWeight}
             style={loginStyles.input}
             keyboardType="numeric"
+            returnKeyType="done"
             placeholderTextColor={"black"}
+
           />
 
            <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={styles.image} />}
+        
 
           
 
           <View style={styles.buttonContainer}>
-            <Button title="Add Pet" onPress={handleAddPet} />
-            <Button title="Cancel" onPress={props.onClose} color="red" />
+            <TouchableOpacity style={loginStyles.button} onPress={handleAddPet}>
+        <Text style={loginStyles.buttonText}>Add Pet</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={loginStyles.buttonCancel} onPress={handleOnClose}>
+        <Text style={loginStyles.buttonText}>Cancel</Text>
+      </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -138,43 +156,4 @@ export const AddPetModal = (props: AddPetModalProps) => {
 };
 
 
-
-const styles = StyleSheet.create({
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    width: "90%",
-    padding: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    height: "90%",
-    alignContent: "center",
-    justifyContent: "center",
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  input: {
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    marginBottom: 15,
-    paddingVertical: 5,
-  },
-  buttonContainer: {
-    flexDirection: "row-reverse",
-    justifyContent: "space-between",
-    marginBottom: 5,
-  },
-  image: {
-    width: 200,
-    height: 200,
-  },
-});
 

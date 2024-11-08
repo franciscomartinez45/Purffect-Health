@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FlatList, View, Text, StyleSheet, ScrollView } from "react-native";
-
+import { reminderStyles } from "./styles/styles";
 
 interface Reminder {
   id: string;
@@ -47,7 +47,7 @@ export const PetReminders = (props: PetRemindersProp) => {
     }
   };
   useEffect(() => {
-    //refresh the list immediately
+   
     const unsubscribe = getReminders();
     return () => unsubscribe && unsubscribe();
   }, []);
@@ -57,56 +57,19 @@ export const PetReminders = (props: PetRemindersProp) => {
     <FlatList
       data={reminders}
       keyExtractor={(item) => item.id}
-      contentContainerStyle={styles.remindersListContent}
-      showsVerticalScrollIndicator={true} // Shows the scroll indicator
-      nestedScrollEnabled={true} // Enables nested scrolling for iOS
+      contentContainerStyle={reminderStyles.remindersListContent}
+      showsVerticalScrollIndicator={true} 
+      nestedScrollEnabled={true} 
       renderItem={({ item }) => (
-        <View style={styles.reminderItem} key={item.id}>
-          <Text style={styles.reminderDescription}>Description: {item.description}</Text>
-          <Text style={styles.reminderDate}>Date: {new Date(item.dateTime).toLocaleDateString()}</Text>
-          <Text style={styles.reminderTime}>Time: {new Date(item.dateTime).toLocaleTimeString()}</Text>
-          <Text style={styles.reminderId}>Id: {item.id}</Text>
+        <View style={reminderStyles.reminderItem} key={item.id}>
+          <Text style={reminderStyles.reminderDescription}>Description: {item.description}</Text>
+          <Text style={reminderStyles.reminderDate}>Date: {new Date(item.dateTime).toLocaleDateString()}</Text>
+          <Text style={reminderStyles.reminderTime}>Time: {new Date(item.dateTime).toLocaleTimeString()}</Text>
+          <Text style={reminderStyles.reminderId}>Id: {item.id}</Text>
         </View>
       )}
-      style={styles.flatList}
+      style={reminderStyles.flatList}
     />
   );
 };
 
-const styles = StyleSheet.create({
-  remindersListContent: {
-    padding: 20, // Add padding to the FlatList
-  },
-  flatList: {
-    width: '100%', // Set FlatList width to 90% of the parent container
-  },
-  reminderItem: {
-    backgroundColor: '#ffffff', // White background for each reminder item
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 15,
-    width: '100%', // Set each reminder item width to 95% of FlatList width
-    shadowColor: '#000', // Shadow effect for elevation
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5, // Elevation for Android
-  },
-  reminderDescription: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#2c3e50', // Darker text color for better readability
-  },
-  reminderDate: {
-    fontSize: 14,
-    color: '#7f8c8d', // Lighter color for date
-  },
-  reminderTime: {
-    fontSize: 14,
-    color: '#7f8c8d', // Lighter color for time
-  },
-  reminderId: {
-    fontSize: 12,
-    color: '#bdc3c7', // Grey color for ID
-  },
-});
