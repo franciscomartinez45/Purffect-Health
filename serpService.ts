@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = '26074babae0812546b7da10bf0b96188010e8a0f23468c57b644c1d0c50fa533';  
+const API_KEY = 'na';  
 const BASE_URL = 'https://serpapi.com/search'; 
 
 export const search = async (location: String) => {
