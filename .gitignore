@@ -4,9 +4,10 @@
 node_modules/
 
 firebaseConfig.js
-serpService.ts
+
 eas.json
 serpService.ts
+
 # Expo
 .expo/
 dist/
