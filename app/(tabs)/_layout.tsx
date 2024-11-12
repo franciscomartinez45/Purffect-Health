@@ -5,12 +5,13 @@ import { Alert, Pressable, Text } from "react-native";
 import { router } from "expo-router";
 
 import { getAuth, signOut } from "firebase/auth";
+import { headerBackground, textColor } from "@/components/styles/styles";
 
 export function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={22} style={{margin:5}} {...props} />;
 }
 
 export default function TabLayout() {
@@ -30,18 +31,13 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Pet Profiles",
+          headerStyle: {backgroundColor: headerBackground},
+          tabBarStyle:{backgroundColor: headerBackground
+          },
+          tabBarActiveTintColor: textColor,
+          headerTintColor:textColor,
           tabBarIcon: ({ color }) => <TabBarIcon name="paw" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="profileScreen"
-        options={{
-          title: "Profile",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="user-pen" color={color} />
-          ),
-          headerRight: () => (
+           headerRight: () => (
             <Pressable
               onPress={() => {
                 signOut(getAuth());
@@ -54,13 +50,40 @@ export default function TabLayout() {
             >
               {({ pressed }) => (
                 <FontAwesome
-                  name="door-open"
+                  name="user"
                   size={25}
                   style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                 />
               )}
             </Pressable>
           ),
+        }}
+      />
+       <Tabs.Screen
+        name="calendarScreen"
+        options={{
+          headerStyle: {backgroundColor: headerBackground},
+          tabBarStyle:{backgroundColor: headerBackground
+          },
+          tabBarActiveTintColor: textColor,
+          headerTintColor:textColor,
+          tabBarIcon: ({ color }) => <TabBarIcon name="calendar" color={color} />,
+        }}
+      />
+     
+      <Tabs.Screen
+        name="map"
+        options={{
+          headerStyle: {backgroundColor: headerBackground},
+          tabBarStyle:{backgroundColor: headerBackground
+          },
+          tabBarActiveTintColor: textColor,
+          headerTintColor:textColor,
+          title: "Find Care",
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="map" color={color} />
+          ),
+         
         }}
       />
     </Tabs>

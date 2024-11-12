@@ -1,14 +1,34 @@
 import { Dimensions, StyleSheet } from "react-native";
-export const styles = StyleSheet.create({
-    //calendar
-  calendarContainer: {
-    flex: 1,
-    padding: 10,
+export const primary = "#ffffff";
+export const textColor = "black"
+export const buttonPrimary = "#F4F0DB";
+export const textInputColor = "#ffffff";
+export const headerBackground = "#ffffff";
+export const tabBottomColor = "#ffffff";
+
+export const showPetsStyle = StyleSheet.create({
+   container: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between', 
+    padding: 0,
+    
   },
-  calendar: {
-    width: '100%',
-    height: 400,
+   circleButton: {
+    width: 130, 
+    height: 130, 
+    borderRadius: 60, 
+    overflow: 'hidden', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    
   },
+  imageProfile: {
+    width: '100%', 
+    height: '100%', 
+    },
+})
+export const petProfileStyle = StyleSheet.create({
   reminderList: {
     marginTop: 20,
   },
@@ -49,7 +69,6 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
   buttonContainer: {
-    
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 15,
@@ -92,37 +111,18 @@ export const styles = StyleSheet.create({
     height: "50%",
     paddingBottom:25,
   },
-  container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around', // Space the items evenly
-    padding: 10,
-  },
+ 
   profileButton: {
     width: '30%', 
     alignItems: 'center', 
     marginBottom: 10, 
   },
-  circleButton: {
-    width: 90, 
-    height: 90, 
-    borderRadius: 40, 
-    overflow: 'hidden', 
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+ 
   initial: {
     fontSize: 24, 
     color: '#fff',
   },
-    imageProfile: {
-    width: '100%', 
-    height: '100%', 
-    },
     modalPetProfileBackground: {
-    
-    
-   
     backgroundColor: 'rgba(0, 0, 0, 0.7)', 
   },
   imagePetProfile: {
@@ -156,10 +156,12 @@ export const styles = StyleSheet.create({
    circleProfileButton: {
     width: 150, 
     height: 150, 
-    borderRadius: 80, 
+    borderRadius: 40, 
     overflow: 'hidden', 
     justifyContent: 'center',
     alignItems: 'center',
+    
+    
   },
   petInfo: {
     flex: 1,
@@ -174,18 +176,17 @@ export const styles = StyleSheet.create({
   petDetails: {
     fontSize: 16,
     color: '#666',
-    
   },
   buttonProfileContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: 'auto', // Pushes buttons to the bottom of the modal
+    marginTop: 'auto', 
     paddingVertical: 20,
   },
   
   closeButton: {
-    backgroundColor: '#f44336', // Red for cancel action
+    backgroundColor: '#f44336', 
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -196,53 +197,16 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
+  modalButtons:{
+    borderColor:"black",
+    width:"100%",
+    
+    flex:1,
+    borderWidth:5,
+    
+  }
 });
 
-
-export const loginStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "#f8f8f8", // Light background color
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-
-  input: {
-    height: 50,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 15,
-    marginBottom: 15,
-    backgroundColor: "#fff", 
-  },
-  inputContainer: {
-    flex: 1,
-  },
-  button: {
-    backgroundColor: "#007BFF", 
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  buttonCancel: {
-    backgroundColor: '#f44336', 
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff", 
-    fontWeight: "bold",
-  },
-  
-});
 export const reminderStyles = StyleSheet.create({
   remindersListContent: {
     padding: 20,
@@ -280,16 +244,25 @@ export const reminderStyles = StyleSheet.create({
     color: '#bdc3c7', 
   },
 });
-export const calendarStyles = StyleSheet.create({
-  calendarContainer: {
+export const calendarStyle = StyleSheet.create({
+  calendar:{
+
+  borderWidth: 1,
+  borderColor: '#e0e0e0',
+  borderRadius: 10,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.1,
+  shadowRadius: 5,
+  elevation: 3,
+},
+
+}
+)
+export const calendarModalStyle = StyleSheet.create({
+modalOverlay: {
     flex: 1,
-  },
-  calendar: {
-    marginBottom: 10,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -321,12 +294,13 @@ export const calendarStyles = StyleSheet.create({
   closeButton: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: '#2196F3',
+    width:"auto",
+    backgroundColor: buttonPrimary,
     borderRadius: 5,
   },
   closeButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: textColor,
+    fontWeight: 'thin',
   },
 });
 export const mapStyles= StyleSheet.create({
@@ -378,5 +352,80 @@ export const mapStyles= StyleSheet.create({
     alignItems: 'center',
   },
 });
+export const loginStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: primary, 
+    color: textColor
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: "thin",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  welcomeText:{
+    fontSize:40,
+    fontWeight:"bold",
+    margin:20,
+    textAlign:"center",
+  },
 
-
+  input: {
+    height: 50,
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 15,
+    marginBottom: 15,
+    backgroundColor: textInputColor, 
+    shadowRadius:5,
+    shadowOpacity:5
+  },
+  inputContainer: {
+    flex: 1,
+  },
+  button: {
+    backgroundColor: buttonPrimary, 
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+    borderColor:"black",
+    borderWidth:1
+  },
+  buttonText: {
+    color:textColor,
+    fontWeight: "bold",
+  },
+  buttonCancel: {
+    backgroundColor: '#f44336', 
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+});
+export const indexStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: primary, 
+    padding: 20, 
+    color: textColor
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center", 
+    alignItems: "center", 
+  },
+  welcomeText:{
+    fontSize:50
+  },
+  smallText:{
+    fontSize:18
+  },
+  welcomeContainer:{
+    borderBottomColor:"black",
+    borderBottomWidth:1
+  }
+});

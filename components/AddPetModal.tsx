@@ -5,18 +5,18 @@ import {
   Text,
   TextInput,
   Button,
-  StyleSheet,
+
   Alert,
   Image,
   TouchableOpacity,
-  Keyboard,
+  
 } from "react-native";
-import { loginStyles } from "./styles/styles";
+import { loginStyles} from "./styles/styles";
 import { getAuth } from "firebase/auth";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig.js";
 import * as ImagePicker from 'expo-image-picker';
-import { styles } from "./styles/styles";
+import { petProfileStyle} from "./styles/styles";
 interface AddPetModalProps {
   visible: boolean;
   onClose: () => void;
@@ -102,10 +102,10 @@ export const AddPetModal = (props: AddPetModalProps) => {
 
   return (
    <Modal visible={props.visible} animationType="slide" transparent={true}>
-      <View style={styles.modalAddContainer}>
-        <View style={styles.modalContent}>
-          {image && <Image source={{ uri: image }} style={styles.image} />}
-          <Text style={styles.modalTitle}>Add New Pet</Text>
+      <View style={petProfileStyle.modalAddContainer}>
+        <View style={petProfileStyle.modalContent}>
+          {image && <Image source={{ uri: image }} style={petProfileStyle.image} />}
+          <Text style={petProfileStyle.modalTitle}>Add New Pet</Text>
 
           <TextInput
             placeholder="Pet Name"
@@ -141,7 +141,7 @@ export const AddPetModal = (props: AddPetModalProps) => {
 
           
 
-          <View style={styles.buttonContainer}>
+          <View style={petProfileStyle.buttonContainer}>
             <TouchableOpacity style={loginStyles.button} onPress={handleAddPet}>
         <Text style={loginStyles.buttonText}>Add Pet</Text>
       </TouchableOpacity>

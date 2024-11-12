@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 
-import loginStyles from "./styles/loginRegister";
+import { loginStyles } from "./styles/styles";
 import { getAuth } from "firebase/auth";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";

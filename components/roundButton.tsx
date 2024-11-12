@@ -1,6 +1,7 @@
 import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { primary, textColor } from "./styles/styles";
 
 interface RoundButtonProps {
   onPress: () => void; // Define onPress as a prop
@@ -9,7 +10,7 @@ interface RoundButtonProps {
 export const RoundButton = (props:RoundButtonProps) => {
   return (
     <TouchableOpacity style={roundButton.button} onPress={props.onPress}>
-      <Icon name="plus" size={24} color="#fff" />
+      <Icon name="plus" size={24} color={textColor} />
     </TouchableOpacity>
   );
 };
@@ -19,7 +20,7 @@ const roundButton = StyleSheet.create({
     width: 80, 
     height: 80, 
     borderRadius: 50,
-    backgroundColor: "#007BFF", 
+    backgroundColor: primary, 
     alignItems: "center", 
     justifyContent: "center", 
     position: "absolute",

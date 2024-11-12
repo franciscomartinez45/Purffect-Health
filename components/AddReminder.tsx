@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { TextInput, Text, Button, Alert, StyleSheet, Modal, View, Keyboard } from "react-native";
+import { TextInput, Text, Button, Alert,  Modal, View, TouchableOpacity } from "react-native";
 import DateTimePicker, {
   DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import { getAuth } from "firebase/auth";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
-import { styles } from "./styles/styles";
+import { loginStyles, petProfileStyle } from "./styles/styles";
 
 
 interface AddReminderProps {
@@ -34,11 +34,12 @@ export const AddReminder = (props: AddReminderProps) => {
         return;
       }
       try {
-        const reminder = {
-          description: description,
-          date: dueDate.toISOString(),
-        };
+     
 
+      const reminder = {
+        description: description,
+        date: dueDate.toLocaleString(), 
+      };
         const userRef = doc(db, "user", currentUser.uid);
         const petRef = doc(userRef, "pets", props.petId);
         const remindersRef = collection(petRef, "reminders");
@@ -55,10 +56,10 @@ export const AddReminder = (props: AddReminderProps) => {
         console.error("Error adding reminder:", err);
       }
     } 
-    setShowDatePicker(false);
-    setShowTimePicker(false);
+    setShowDatePicker(true);
+    setShowTimePicker(true);
     setDescription("");
-    props.onClose();
+    props.onClose(); 
   };
 
  const handleDateChange = (
@@ -88,21 +89,15 @@ const handleTimeChange = (
   event: DateTimePickerEvent,
   time?: Date | undefined
 ) => {
-  
-  if (event.type === "dismissed") {
-    const selectedTime = time || dueDate; 
-    const newDate = new Date(dueDate); 
-    newDate.setHours(selectedTime.getHours(), selectedTime.getMinutes()); 
-
-    
-    setDueDate(newDate); 
+  if (event.type === "set" && time) {
+    const newDate = new Date(dueDate);
+    newDate.setHours(time.getHours(), time.getMinutes());
+    setDueDate(newDate);
     setShowTimePicker(false);
     setShowDatePicker(false);
-    
-    
   }
-
 };
+
 
 const handleOnClose = ()=>{
   setDescription("");
@@ -110,18 +105,18 @@ const handleOnClose = ()=>{
 }
   return (
    <Modal visible={props.isVisible} animationType="slide" transparent>
-      <View style={styles.modalBackground}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.title}>Description</Text>
+      <View style={petProfileStyle.modalBackground}>
+        <View style={petProfileStyle.modalContainer}>
+          <Text style={petProfileStyle.title}>Description</Text>
           <TextInput
-            style={styles.input}
+            style={petProfileStyle.input}
             onChangeText={setDescription}
-            placeholder="Enter reminder description"
+            placeholder="Walk, Feed, Bathe, Vet appt, etc."
             returnKeyType="done" 
-            
+            placeholderTextColor={"#666"}
           />
-          <Text style={styles.title}>Due Date</Text> 
-          {dueDate&&(<Text>{dueDate.toISOString().split('T')[0]}</Text>)}
+          <Text style={petProfileStyle.title}>Due Date</Text> 
+          
           <Button title="Select Due Date" onPress={() => setShowDatePicker(true)} />
            
           {showDatePicker && (
@@ -129,15 +124,14 @@ const handleOnClose = ()=>{
               value={dueDate}
               mode="date"
               display="calendar"
-
               onChange={handleDateChange}
+              
             />
           )}
-          <Text style={styles.title}>Due Time</Text>
+          <Text style={petProfileStyle.title}>Due Time</Text>
           <Button title="Select Due Time" onPress={() => setShowTimePicker(true)} />
           {showTimePicker && (
             <DateTimePicker
-  
               value={dueDate}
               mode="time"
               display="clock"
@@ -145,9 +139,9 @@ const handleOnClose = ()=>{
               onChange={handleTimeChange}
             />
           )}
-          <View style={styles.buttonContainer}>
-            <Button title="Add Reminder" onPress={addUserData} color="#4CAF50" />
-            <Button title="Cancel" onPress={handleOnClose} color="#f44336" />
+          <View style={petProfileStyle.buttonProfileContainer}>
+            <TouchableOpacity style = {loginStyles.button} onPress={addUserData}><Text>Add Reminder</Text></TouchableOpacity> 
+            <TouchableOpacity style = {loginStyles.buttonCancel} onPress={handleOnClose} ><Text>Cancel</Text></TouchableOpacity>
           </View>
         </View>
       </View>

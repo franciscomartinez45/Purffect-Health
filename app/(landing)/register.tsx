@@ -1,6 +1,6 @@
 import { TextInput, Text, TouchableOpacity } from "react-native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import loginStyles from "@/components/styles/loginRegister";
+import { loginStyles,loginStyles2 } from "@/components/styles/styles";
 import { useState } from "react";
 import { router } from "expo-router";
 import { doc, setDoc } from "firebase/firestore";
@@ -35,7 +35,9 @@ export default function RegisterScreen() {
 
   return (
     <SafeAreaView style={loginStyles.container}>
-      <Text style={loginStyles.title}>Register Screen</Text>
+      <Text style={loginStyles.welcomeText}>Purrfect Health</Text>
+      <Text style = {loginStyles.title}>New to the App? Register for a free account!</Text>
+    
       <TextInput
         style={loginStyles.input}
         onChangeText={(text) => setFirstName(text)}

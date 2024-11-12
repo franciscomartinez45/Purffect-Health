@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text,Modal, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { collection, getDocs, onSnapshot } from 'firebase/firestore';
 import { db } from '@/firebaseConfig'; 
 import { getAuth } from 'firebase/auth';
-import { calendarStyles, styles } from './styles/styles';
+import { buttonPrimary, calendarModalStyle, calendarStyle, primary, textColor} from './styles/styles';
+
+
 
 interface Reminder {
   date: string; 
@@ -22,6 +24,15 @@ export const PetCalendar = () => {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { currentUser } = getAuth();
   
+  function convertDate(passedDate: String){
+    const dateString = passedDate.split(",")[0].split("/");
+    let month = dateString[1];
+    if(month.charAt(0)!='1'){
+      month = "0"+ month;
+    }
+    return `${dateString[2]}-${dateString[0]}-${month}`;
+    
+  }
   useEffect(() => {
     const getReminders = async () => {
       if (currentUser) {
@@ -30,13 +41,15 @@ export const PetCalendar = () => {
           const remindersData: RemindersByDate = {};
 
           for (const petDoc of snapshot.docs) {
-            const petName = petDoc.data().name; // Get the pet's name
+            const petName = petDoc.data().name; 
             const remindersCollection = collection(petsCollection, petDoc.id, 'reminders');
             const remindersSnapshot = await getDocs(remindersCollection);
 
             remindersSnapshot.forEach(doc => {
               const data = doc.data() as Reminder;
-              const date = new Date(data.date).toISOString().split('T')[0]; 
+              const data_date = data.date;
+              const date = convertDate(data_date);
+             
               const reminderDescription = data.description;
 
               if (!remindersData[date]) {
@@ -45,7 +58,6 @@ export const PetCalendar = () => {
               remindersData[date].push({ petName, description: reminderDescription });
             });
           }
-
           setReminders(remindersData);
         });
 
@@ -66,9 +78,26 @@ export const PetCalendar = () => {
   };
 
   return (
-    <View style={styles.calendarContainer}>
-      <Calendar
-        style={styles.calendar}
+    <View>
+      <Calendar style = {calendarStyle.calendar}
+       
+theme={{
+  backgroundColor: primary, 
+  calendarBackground: primary, 
+  textSectionTitleColor: textColor, 
+  selectedDayTextColor: primary, 
+  todayTextColor: 'red', 
+  dayTextColor: textColor,
+  textDisabledColor: '#d1d1d6', 
+  arrowColor: textColor, 
+  monthTextColor: textColor, 
+  textDayFontWeight: '500',
+  textMonthFontWeight: '700',
+  textDayHeaderFontWeight: '600',
+  textDayFontSize: 20,
+  textMonthFontSize: 20,
+  textDayHeaderFontSize: 14,
+}}
         markedDates={Object.keys(reminders).reduce((acc, date) => {
           acc[date] = { marked: true, dotColor: 'red' };
           return acc;
@@ -82,22 +111,22 @@ export const PetCalendar = () => {
         animationType="slide"
         onRequestClose={closeModal}
       >
-        <View style={calendarStyles.modalOverlay}>
-          <View style={calendarStyles.modalContainer}>
-            <Text style={calendarStyles.modalTitle}>Reminders for {selectedDate}</Text>
-            <ScrollView style={calendarStyles.remindersList}>
+        <View style={calendarModalStyle.modalOverlay}>
+          <View style={calendarModalStyle.modalContainer}>
+            <Text style={calendarModalStyle.modalTitle}>Reminders for {selectedDate}</Text>
+            <ScrollView style={calendarModalStyle.remindersList}>
               {selectedDate && reminders[selectedDate]?.length ? (
                 reminders[selectedDate].map((reminder, index) => (
-                  <Text key={index} style={calendarStyles.reminderText}>
+                  <Text key={index} style={calendarModalStyle.reminderText}>
                     • {reminder.petName}: {reminder.description}
                   </Text>
                 ))
               ) : (
-                <Text style={calendarStyles.noRemindersText}>No reminders for this date.</Text>
+                <Text style={calendarModalStyle.noRemindersText}>No reminders for this date.</Text>
               )}
             </ScrollView>
-            <TouchableOpacity style={calendarStyles.closeButton} onPress={closeModal}>
-              <Text style={calendarStyles.closeButtonText}>Close</Text>
+            <TouchableOpacity style={calendarModalStyle.closeButton} onPress={closeModal}>
+              <Text style={calendarModalStyle.closeButtonText}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>

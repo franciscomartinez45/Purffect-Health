@@ -2,7 +2,7 @@ import { db } from "@/firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { FlatList, View, Text, StyleSheet, ScrollView } from "react-native";
+import { FlatList, View, Text } from "react-native";
 import { reminderStyles } from "./styles/styles";
 
 interface Reminder {
@@ -63,8 +63,7 @@ export const PetReminders = (props: PetRemindersProp) => {
       renderItem={({ item }) => (
         <View style={reminderStyles.reminderItem} key={item.id}>
           <Text style={reminderStyles.reminderDescription}>Description: {item.description}</Text>
-          <Text style={reminderStyles.reminderDate}>Date: {new Date(item.dateTime).toLocaleDateString()}</Text>
-          <Text style={reminderStyles.reminderTime}>Time: {new Date(item.dateTime).toLocaleTimeString()}</Text>
+          <Text style={reminderStyles.reminderDate}>Date: {item.dateTime}</Text>
           <Text style={reminderStyles.reminderId}>Id: {item.id}</Text>
         </View>
       )}

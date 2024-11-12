@@ -4,13 +4,12 @@ import {
   View,
   Text,
   Image,
-  StyleSheet,
   TouchableOpacity,
 } from "react-native";
 import {AddReminder} from "./AddReminder";
 import { PetReminders } from "./Reminders";
 import { Pet } from "@/components/PetProfiles";
-import { styles } from "./styles/styles";
+import { petProfileStyle, showPetsStyle } from "./styles/styles";
 import { loginStyles } from "./styles/styles";
 interface PetProfileModalProps {
   visible: boolean;
@@ -29,38 +28,34 @@ export const PetProfileModal= (props: PetProfileModalProps) => {
   }
   return (
   <Modal visible={props.visible} animationType="slide" transparent>
-      <View style={styles.modalBackground}>
-        <View style={styles.modalPetProfileContainer}>
-          <View style={styles.profileHeader}>
-            <View style={styles.circleProfileButton}>
+      <View style={petProfileStyle.modalBackground}>
+        <View style={petProfileStyle.modalPetProfileContainer}>
+          <View style={petProfileStyle.profileHeader}>
+            <View style={petProfileStyle.circleProfileButton}>
               {props.pet.uri ? ( 
                 <Image
                   source={{ uri: props.pet.uri }} 
-                  style={styles.imageProfile}
+                  style={showPetsStyle.imageProfile}
                   resizeMode="cover"
                 />
               ):(<></>)}
             </View>
-            <View style={styles.petInfo}>
-              <Text style={styles.petName}>{props.pet.name}</Text>
-              <Text style={styles.petDetails}>Weight: {props.pet.weight} kg</Text>
-              <Text style={styles.petDetails}>Age: {props.pet.age} years</Text>
+            <View style={petProfileStyle.petInfo}>
+              <Text style={petProfileStyle.petName}>{props.pet.name}</Text>
+              <Text style={petProfileStyle.petDetails}>Weight: {props.pet.weight} lbs</Text>
+              <Text style={petProfileStyle.petDetails}>Age: {props.pet.age} years</Text>
               
             </View>
           </View>
           <PetReminders petId={props.pet.id}></PetReminders>
          
-          <View style={styles.buttonContainer}>
+          <View style={petProfileStyle.buttonProfileContainer}>
               <TouchableOpacity style={loginStyles.button} onPress={handleOnPress}>
                <Text style={loginStyles.buttonText}>Add Reminder</Text>
-                   </TouchableOpacity>
-     
-      
-           
-            
+                   </TouchableOpacity>   
             <TouchableOpacity style={loginStyles.buttonCancel}
             onPress={props.onClose}>
-              <Text style={styles.buttonText}>Close</Text>
+              <Text style={loginStyles.buttonText}>Close</Text>
             </TouchableOpacity>
           
           </View>

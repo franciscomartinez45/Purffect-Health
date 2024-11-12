@@ -4,7 +4,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Text } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
-import loginStyles from "@/components/styles/loginRegister";
+import { loginStyles } from "@/components/styles/styles";
 export default function LoginScreen() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -22,7 +22,7 @@ export default function LoginScreen() {
   };
   return (
     <SafeAreaView style={loginStyles.container}>
-      <Text style={loginStyles.title}>Login with an existing account</Text>
+      <Text style={loginStyles.title}>Welcome Back!</Text>
       <TextInput
         style={loginStyles.input}
         placeholder="Email"

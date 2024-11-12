@@ -1,13 +1,12 @@
 import {PetCalendar} from "@/components/PetCalendar";
 import { PetProfileModal } from "./PetProfileModal";
 import { db } from "../firebaseConfig";
-import { styles } from "./styles/styles";
+import { petProfileStyle, showPetsStyle } from "./styles/styles";
 import { getAuth } from "firebase/auth";
 import { collection, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   View,
-  Text,
   TouchableOpacity,
   Image
 } from "react-native";
@@ -64,15 +63,14 @@ export function ShowPets() {
   };
   return (
     <SafeAreaView>
-      <Text>Pet Profiles:</Text>
-      <View style={styles.container}>
+      <View style={showPetsStyle.container}>
       {reminders.map((item) => (
-        <TouchableOpacity key={item.id} onPress={() => handleProfile(item)} style={styles.profileButton}>
-           <View style={styles.circleButton}>
+        <TouchableOpacity key={item.id} onPress={() => handleProfile(item)} style={petProfileStyle.profileButton}>
+           <View style={showPetsStyle.circleButton}>
               {item.uri ? ( 
                 <Image
                   source={{ uri: item.uri }} 
-                  style={styles.imageProfile}
+                  style={showPetsStyle.imageProfile}
                   resizeMode="cover"
                 />
               ) : (
@@ -82,7 +80,7 @@ export function ShowPets() {
         </TouchableOpacity>
       ))}
     </View>
-    <PetCalendar></PetCalendar>
+    
     {currentPet &&
       <PetProfileModal
         visible={isModalVisible}

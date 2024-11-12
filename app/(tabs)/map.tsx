@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Dimensions, ActivityIndicator, Linking, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator, Linking, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { search } from '@/serpService'; 
 import { mapStyles } from '@/components/styles/styles';
@@ -21,8 +21,8 @@ export default function profileScreen() {
       setLoading(true);
       const location = '@33.827820,-118.272346,14z'; 
       const data = await search(location);
-      const sortedResults = (data?.local_results || []).sort((a: { rating: number; }, b: { rating: number; }) => b.rating - a.rating);
-      setResults(sortedResults);
+      const results = (data?.local_results || []).sort((a: { rating: number; }, b: { rating: number; }) => b.rating - a.rating);
+      setResults(results);
       setLoading(false);
     };
 
@@ -70,7 +70,7 @@ export default function profileScreen() {
             }}
             title={item.title}
             description={item.address}
-            pinColor={selectedPlace?.place_id === item.place_id ? 'green' : 'red'} 
+            pinColor={selectedPlace?.place_id === item.place_id ? 'blue' : 'red'} 
             onPress={() => setSelectedPlace(item)} 
           >
             <Callout>
