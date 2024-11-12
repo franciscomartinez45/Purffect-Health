@@ -22,6 +22,7 @@ export default function LoginScreen() {
   };
   return (
     <SafeAreaView style={loginStyles.container}>
+      <Text style={loginStyles.welcomeText}>Purrfect Health</Text>
       <Text style={loginStyles.title}>Welcome Back!</Text>
       <TextInput
         style={loginStyles.input}

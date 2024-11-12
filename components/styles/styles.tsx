@@ -405,6 +405,15 @@ export const loginStyles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
   },
+  addButton:{
+    padding: 15,
+    borderRadius: 5,
+    alignItems: "center",
+    borderColor:"black",
+    borderWidth:1,
+  
+  }
+ 
 });
 export const indexStyles = StyleSheet.create({
   container: {

@@ -5,18 +5,16 @@ import {
   Text,
   TextInput,
   Button,
-
   Alert,
   Image,
   TouchableOpacity,
-  
 } from "react-native";
-import { loginStyles} from "./styles/styles";
+import { loginStyles, showPetsStyle } from "./styles/styles";
 import { getAuth } from "firebase/auth";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig.js";
-import * as ImagePicker from 'expo-image-picker';
-import { petProfileStyle} from "./styles/styles";
+import * as ImagePicker from "expo-image-picker";
+import { petProfileStyle } from "./styles/styles";
 interface AddPetModalProps {
   visible: boolean;
   onClose: () => void;
@@ -27,30 +25,33 @@ export const AddPetModal = (props: AddPetModalProps) => {
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
   const { currentUser } = getAuth();
- const [image, setImage] = useState<string | null>(null);
+  const [image, setImage] = useState<string | null>(null);
   const addPet = async () => {
     if (currentUser) {
-      
       if (!petName.trim()) {
         Alert.alert("Missing data", "Missing a description", [{ text: "OK" }]);
         return;
       }
       if (!age || !weight) {
-        Alert.alert("Missing data", "Age or Weight not specified", [{ text: "OK" }]);
+        Alert.alert("Missing data", "Age or Weight not specified", [
+          { text: "OK" },
+        ]);
         return;
       }
-      
-      if (!image){
-      Alert.alert("Missing data", "Pet picture is requires, please retry", [{ text: "OK" }]);
+
+      if (!image) {
+        Alert.alert("Missing data", "Pet picture is requires, please retry", [
+          { text: "OK" },
+        ]);
         return;
-    }
-   
+      }
+
       try {
         const reminder = {
           name: petName,
           age: age,
           weight: weight,
-          uri: image
+          uri: image,
         };
 
         const userRef = doc(db, "user", currentUser.uid);
@@ -63,12 +64,10 @@ export const AddPetModal = (props: AddPetModalProps) => {
       } catch (err) {
         console.error("Error adding reminder:", err);
       }
-    } 
+    }
   };
 
-
   const pickImage = async () => {
-    
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -76,15 +75,12 @@ export const AddPetModal = (props: AddPetModalProps) => {
       quality: 1,
     });
 
-   
-
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
   };
 
   const handleAddPet = () => {
-    
     addPet();
     setImage(null);
     setPetName("");
@@ -92,21 +88,30 @@ export const AddPetModal = (props: AddPetModalProps) => {
     setAge("");
     props.onClose();
   };
-  const handleOnClose = ()=>{
+  const handleOnClose = () => {
     setImage(null);
     setPetName("");
     setWeight("");
     setAge("");
     props.onClose();
-  }
+  };
 
   return (
-   <Modal visible={props.visible} animationType="slide" transparent={true}>
+    <Modal visible={props.visible} animationType="slide" transparent={true}>
       <View style={petProfileStyle.modalAddContainer}>
         <View style={petProfileStyle.modalContent}>
-          {image && <Image source={{ uri: image }} style={petProfileStyle.image} />}
+          {image ? (
+            <View style={showPetsStyle.circleButton}>
+              <Image
+                source={{ uri: image }}
+                style={showPetsStyle.imageProfile}
+                resizeMode="cover"
+              />
+            </View>
+          ) : (
+            <></>
+          )}
           <Text style={petProfileStyle.modalTitle}>Add New Pet</Text>
-
           <TextInput
             placeholder="Pet Name"
             value={petName}
@@ -123,7 +128,7 @@ export const AddPetModal = (props: AddPetModalProps) => {
             style={loginStyles.input}
             keyboardType="numeric"
             placeholderTextColor={"black"}
-             returnKeyType="done"
+            returnKeyType="done"
           />
           <TextInput
             placeholder="Weight"
@@ -133,27 +138,23 @@ export const AddPetModal = (props: AddPetModalProps) => {
             keyboardType="numeric"
             returnKeyType="done"
             placeholderTextColor={"black"}
-
           />
-
-           <Button title="Pick an image from camera roll" onPress={pickImage} />
-        
-
-          
-
+          <TouchableOpacity style={loginStyles.button} onPress={pickImage}>
+            <Text>Pick image</Text>
+          </TouchableOpacity>
           <View style={petProfileStyle.buttonContainer}>
             <TouchableOpacity style={loginStyles.button} onPress={handleAddPet}>
-        <Text style={loginStyles.buttonText}>Add Pet</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={loginStyles.buttonCancel} onPress={handleOnClose}>
-        <Text style={loginStyles.buttonText}>Cancel</Text>
-      </TouchableOpacity>
+              <Text style={loginStyles.buttonText}>Add Pet</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={loginStyles.buttonCancel}
+              onPress={handleOnClose}
+            >
+              <Text style={loginStyles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
     </Modal>
   );
 };
-
-
-

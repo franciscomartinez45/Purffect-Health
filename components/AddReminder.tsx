@@ -69,12 +69,10 @@ export const AddReminder = (props: AddReminderProps) => {
   
   if (event.type === "set") {
     const currentDate = selectedDate || dueDate; 
-    
     setShowTimePicker(true); 
 
    
     if (currentDate) {
-      console.log("Selected date:", currentDate);
       setDueDate(currentDate); 
     } else {
       console.log("No valid date selected");
@@ -93,8 +91,8 @@ const handleTimeChange = (
     const newDate = new Date(dueDate);
     newDate.setHours(time.getHours(), time.getMinutes());
     setDueDate(newDate);
-    setShowTimePicker(false);
-    setShowDatePicker(false);
+    setShowTimePicker(true);
+    setShowDatePicker(true);
   }
 };
 
@@ -115,9 +113,9 @@ const handleOnClose = ()=>{
             returnKeyType="done" 
             placeholderTextColor={"#666"}
           />
-          <Text style={petProfileStyle.title}>Due Date</Text> 
-          
-          <Button title="Select Due Date" onPress={() => setShowDatePicker(true)} />
+          <View style = {petProfileStyle.buttonProfileContainer}>
+            <TouchableOpacity style = {loginStyles.addButton} onPress={() => setShowDatePicker(true)}><Text>Select Due Date</Text></TouchableOpacity> 
+         
            
           {showDatePicker && (
             <DateTimePicker
@@ -128,8 +126,10 @@ const handleOnClose = ()=>{
               
             />
           )}
-          <Text style={petProfileStyle.title}>Due Time</Text>
-          <Button title="Select Due Time" onPress={() => setShowTimePicker(true)} />
+          </View>
+           <View style = {petProfileStyle.buttonProfileContainer}>
+          <TouchableOpacity style = {loginStyles.addButton} onPress={() => setShowTimePicker(true)}><Text>Select Due Time</Text></TouchableOpacity> 
+
           {showTimePicker && (
             <DateTimePicker
               value={dueDate}
@@ -139,6 +139,7 @@ const handleOnClose = ()=>{
               onChange={handleTimeChange}
             />
           )}
+          </View>
           <View style={petProfileStyle.buttonProfileContainer}>
             <TouchableOpacity style = {loginStyles.button} onPress={addUserData}><Text>Add Reminder</Text></TouchableOpacity> 
             <TouchableOpacity style = {loginStyles.buttonCancel} onPress={handleOnClose} ><Text>Cancel</Text></TouchableOpacity>
