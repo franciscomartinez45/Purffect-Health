@@ -101,17 +101,19 @@ export const AddPetModal = (props: AddPetModalProps) => {
       <View style={petProfileStyle.modalAddContainer}>
         <View style={petProfileStyle.modalContent}>
           {image ? (
-            <View style={showPetsStyle.circleButton}>
-              <Image
-                source={{ uri: image }}
-                style={showPetsStyle.imageProfile}
-                resizeMode="cover"
-              />
+            <View style={petProfileStyle.imageView}>
+              <View style={petProfileStyle.circleProfileButton}>
+                <Image
+                  source={{ uri: image }}
+                  style={showPetsStyle.imageProfile}
+                  resizeMode="cover"
+                />
+              </View>
             </View>
           ) : (
-            <></>
+            <Text style={petProfileStyle.modalTitle}>Add New Pet</Text>
           )}
-          <Text style={petProfileStyle.modalTitle}>Add New Pet</Text>
+
           <TextInput
             placeholder="Pet Name"
             value={petName}
@@ -140,7 +142,7 @@ export const AddPetModal = (props: AddPetModalProps) => {
             placeholderTextColor={"black"}
           />
           <TouchableOpacity style={loginStyles.button} onPress={pickImage}>
-            <Text>Pick image</Text>
+            <Text style={loginStyles.buttonText}>Pick image</Text>
           </TouchableOpacity>
           <View style={petProfileStyle.buttonContainer}>
             <TouchableOpacity style={loginStyles.button} onPress={handleAddPet}>

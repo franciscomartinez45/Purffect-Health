@@ -5,6 +5,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
 import { getAuth } from "firebase/auth";
 import {
+  buttonPrimary,
   calendarModalStyle,
   calendarStyle,
   primary,
@@ -88,13 +89,13 @@ export const PetCalendar = () => {
         theme={{
           backgroundColor: primary,
           calendarBackground: primary,
-          textSectionTitleColor: textColor,
-          selectedDayTextColor: primary,
+          textSectionTitleColor: buttonPrimary,
+          selectedDayTextColor: buttonPrimary,
           todayTextColor: "red",
-          dayTextColor: textColor,
+          dayTextColor: "black",
           textDisabledColor: "#d1d1d6",
-          arrowColor: textColor,
-          monthTextColor: textColor,
+          arrowColor: buttonPrimary,
+          monthTextColor: buttonPrimary,
           textDayFontWeight: "500",
           textMonthFontWeight: "700",
           textDayHeaderFontWeight: "600",
