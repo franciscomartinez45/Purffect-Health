@@ -1,9 +1,8 @@
-import { Tabs } from "expo-router";
+import { Slot, Tabs } from "expo-router";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import {
   buttonPrimary,
   headerBackground,
-  textColor,
 } from "../../components/styles/styles";
 import { HapticTab } from "@/components/HapticTab";
 
