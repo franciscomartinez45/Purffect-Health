@@ -76,13 +76,14 @@ export const petProfileStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
+    height: "100%",
   },
   modalContent: {
     width: "90%",
-    padding: 20,
+    padding: 15,
     backgroundColor: "white",
     borderRadius: 10,
-    height: "90%",
+    height: "70%",
     justifyContent: "center",
     alignContent: "center",
   },
@@ -195,7 +196,6 @@ export const petProfileStyle = StyleSheet.create({
   modalButtons: {
     borderColor: "black",
     width: "100%",
-
     flex: 1,
     borderWidth: 5,
   },
@@ -203,7 +203,7 @@ export const petProfileStyle = StyleSheet.create({
     alignContent: "center",
     justifyContent: "space-between",
     left: "28%",
-    bottom: 35,
+    bottom: 10,
   },
 });
 
@@ -411,6 +411,14 @@ export const loginStyles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
   },
+  submitButton: {
+    backgroundColor: buttonPrimary,
+    padding: 15,
+    color: primary,
+    borderRadius: 5,
+    borderColor: "black",
+    borderWidth: 1,
+  },
 });
 export const indexStyles = StyleSheet.create({
   container: {
@@ -425,7 +433,7 @@ export const indexStyles = StyleSheet.create({
     alignItems: "center",
   },
   welcomeText: {
-    fontSize: 50,
+    fontSize: 35,
   },
   smallText: {
     fontSize: 18,
@@ -437,5 +445,48 @@ export const indexStyles = StyleSheet.create({
   petText: {
     fontSize: 25,
     fontWeight: "100",
+  },
+});
+
+export const profileSettings = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: primary,
+    padding: 20,
+  },
+
+  title: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#333",
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 14,
+    color: "#666",
+    alignSelf: "flex-start",
+    marginBottom: 5,
+    marginTop: 15,
+  },
+  text: {
+    fontSize: 16,
+    color: "#333",
+    alignSelf: "flex-start",
+    marginBottom: 10,
+  },
+  input: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    fontWeight: "300",
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 10,
+    backgroundColor: "#F9F9F9",
   },
 });

@@ -1,32 +1,23 @@
-import { AddPetModal } from "../../components/AddPetModal";
 import { ShowPets } from "@/components/PetProfiles";
-import { RoundButton } from "@/components/roundButton";
+
 import React, { useEffect, useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
+
 import { indexStyles } from "@/components/styles/styles";
 import { Text, View } from "react-native";
 import { getAuth } from "firebase/auth";
 import { db } from "@/firebaseConfig";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 
-interface UserData {
+export interface UserData {
   firstName: string;
   lastName: String;
   email: String;
 }
 
 export default function indexScreen() {
-  const [isModalVisible, setModalVisible] = useState(false);
   const [userData, setUserData] = useState<UserData | null>(null);
   const [userHasPets, setUserPets] = useState<boolean>(false);
   const { currentUser } = getAuth();
-  const handleAddPet = () => {
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-  };
 
   const getUserData = async () => {
     if (currentUser) {
@@ -49,7 +40,7 @@ export default function indexScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={indexStyles.container}>
+    <View style={indexStyles.container}>
       {!userHasPets ? (
         <View style={indexStyles.welcomeContainer}>
           <Text style={indexStyles.welcomeText}>
@@ -64,12 +55,11 @@ export default function indexScreen() {
           <Text style={indexStyles.welcomeText}>
             Welcome back {userData?.firstName}
           </Text>
+          <Text style={indexStyles.smallText}>Your Pets:</Text>
         </View>
       )}
 
       <ShowPets />
-      <RoundButton onPress={handleAddPet} />
-      <AddPetModal visible={isModalVisible} onClose={handleCloseModal} />
-    </SafeAreaView>
+    </View>
   );
 }

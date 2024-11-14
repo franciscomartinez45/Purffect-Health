@@ -22,8 +22,8 @@ interface AddReminderProps {
 
 export const AddReminder = (props: AddReminderProps) => {
   const { currentUser } = getAuth();
-  const [dueDate, setDueDate] = useState<Date>(new Date());
-  const [dueTime, setDueTime] = useState<Date>(new Date());
+  const [dueDate, setDueDate] = useState<Date | null>(new Date());
+  const [dueTime, setDueTime] = useState<Date | null>(new Date());
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [description, setDescription] = useState<string>("");
@@ -55,13 +55,12 @@ export const AddReminder = (props: AddReminderProps) => {
           { text: "OK", style: "cancel" },
         ]);
         setDescription("");
-        setDueDate(new Date());
-        setDueTime(new Date());
+        setDueDate(null);
+        setDueTime(null);
       } catch (err) {
         console.error("Error adding reminder:", err);
       }
     }
-
     props.onClose();
   };
 
@@ -86,6 +85,9 @@ export const AddReminder = (props: AddReminderProps) => {
   const handleOnClose = () => {
     setDatePickerVisibility(false);
     setTimePickerVisibility(false);
+    setDescription("");
+    setDueDate(null);
+    setDueTime(null);
     props.onClose();
   };
 
