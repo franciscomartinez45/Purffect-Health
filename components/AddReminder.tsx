@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { TextInput, Text, Button, Alert,  Modal, View, TouchableOpacity } from "react-native";
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from "@react-native-community/datetimepicker";
+import {
+  TextInput,
+  Text,
+  Button,
+  Alert,
+  Modal,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAuth } from "firebase/auth";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig";
-import { loginStyles, petProfileStyle } from "./styles/styles";
-
+import { loginStyles, petProfileStyle, primary } from "./styles/styles";
 
 interface AddReminderProps {
   petId: string;
@@ -18,91 +23,74 @@ interface AddReminderProps {
 export const AddReminder = (props: AddReminderProps) => {
   const { currentUser } = getAuth();
   const [dueDate, setDueDate] = useState<Date>(new Date());
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
-  const [showTimePicker, setShowTimePicker] = useState<boolean>(false);
+  const [dueTime, setDueTime] = useState<Date>(new Date());
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
   const [description, setDescription] = useState<string>("");
 
-   const addUserData = async () => {
+  const addUserData = async () => {
     if (currentUser) {
       if (!description.trim()) {
         Alert.alert("Missing data", "Missing a description", [{ text: "OK" }]);
         return;
       }
-      
-      if (!dueDate.getTime() || !dueDate.getDay()) {
-        Alert.alert("Missing data", "Missing day and time", [{ text: "OK" }]);
+
+      if (!dueDate || !dueTime) {
+        Alert.alert("Missing data", "Missing date or time", [{ text: "OK" }]);
         return;
       }
       try {
-     
-
-      const reminder = {
-        description: description,
-        date: dueDate.toLocaleString(), 
-      };
+        const reminder = {
+          description: description,
+          date: dueDate.toLocaleDateString(),
+          time: dueTime.toLocaleTimeString(),
+        };
         const userRef = doc(db, "user", currentUser.uid);
         const petRef = doc(userRef, "pets", props.petId);
         const remindersRef = collection(petRef, "reminders");
 
         await addDoc(remindersRef, reminder);
-       
-        Alert.alert("Alert!", "Reminder Succesfully Added!", [
+
+        Alert.alert("Alert!", "Reminder Successfully Added!", [
           { text: "OK", style: "cancel" },
         ]);
         setDescription("");
         setDueDate(new Date());
-        
+        setDueTime(new Date());
       } catch (err) {
         console.error("Error adding reminder:", err);
       }
-    } 
-    setShowDatePicker(true);
-    setShowTimePicker(true);
-    setDescription("");
-    props.onClose(); 
+    }
+
+    props.onClose();
   };
 
- const handleDateChange = (
-  event: DateTimePickerEvent,
-  selectedDate: Date | undefined
-) => {
-  
-  if (event.type === "set") {
-    const currentDate = selectedDate || dueDate; 
-    setShowTimePicker(true); 
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
 
-   
-    if (currentDate) {
-      setDueDate(currentDate); 
-    } else {
-      console.log("No valid date selected");
-    }
-  } else if (event.type === "dismissed") {
-   
-    setShowDatePicker(true);
-  }
-};
+  const showTimePicker = () => {
+    setTimePickerVisibility(true);
+  };
 
-const handleTimeChange = (
-  event: DateTimePickerEvent,
-  time?: Date | undefined
-) => {
-  if (event.type === "set" && time) {
-    const newDate = new Date(dueDate);
-    newDate.setHours(time.getHours(), time.getMinutes());
-    setDueDate(newDate);
-    setShowTimePicker(true);
-    setShowDatePicker(true);
-  }
-};
+  const handleConfirmDate = (date: Date) => {
+    setDueDate(date);
+    setDatePickerVisibility(false);
+  };
 
+  const handleConfirmTime = (time: Date) => {
+    setDueTime(time);
+    setTimePickerVisibility(false);
+  };
 
-const handleOnClose = ()=>{
-  setDescription("");
-  props.onClose();
-}
+  const handleOnClose = () => {
+    setDatePickerVisibility(false);
+    setTimePickerVisibility(false);
+    props.onClose();
+  };
+
   return (
-   <Modal visible={props.isVisible} animationType="slide" transparent>
+    <Modal visible={props.isVisible} animationType="slide" transparent>
       <View style={petProfileStyle.modalBackground}>
         <View style={petProfileStyle.modalContainer}>
           <Text style={petProfileStyle.title}>Description</Text>
@@ -110,43 +98,57 @@ const handleOnClose = ()=>{
             style={petProfileStyle.input}
             onChangeText={setDescription}
             placeholder="Walk, Feed, Bathe, Vet appt, etc."
-            returnKeyType="done" 
+            returnKeyType="done"
             placeholderTextColor={"#666"}
           />
-          <View style = {petProfileStyle.buttonProfileContainer}>
-            <TouchableOpacity style = {loginStyles.addButton} onPress={() => setShowDatePicker(true)}><Text>Select Due Date</Text></TouchableOpacity> 
-         
-           
-          {showDatePicker && (
-            <DateTimePicker
-              value={dueDate}
-              mode="date"
-              display="calendar"
-              onChange={handleDateChange}
-              
-            />
-          )}
-          </View>
-           <View style = {petProfileStyle.buttonProfileContainer}>
-          <TouchableOpacity style = {loginStyles.addButton} onPress={() => setShowTimePicker(true)}><Text>Select Due Time</Text></TouchableOpacity> 
+          {dueDate && <Text>Selected Date is:</Text>}
+          <TouchableOpacity
+            style={loginStyles.addButton}
+            onPress={showDatePicker}
+          >
+            {!dueDate ? (
+              <Text>Select Date</Text>
+            ) : (
+              <Text>{dueDate.toLocaleDateString()}</Text>
+            )}
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirmDate}
+            onCancel={() => setDatePickerVisibility(false)}
+          />
+          {dueTime && <Text>Selected Time is:</Text>}
+          <TouchableOpacity
+            style={loginStyles.addButton}
+            onPress={showTimePicker}
+          >
+            {!dueTime ? (
+              <Text>Select Time</Text>
+            ) : (
+              <Text>{dueTime.toLocaleTimeString()}</Text>
+            )}
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={isTimePickerVisible}
+            mode="time"
+            onConfirm={handleConfirmTime}
+            onCancel={() => setTimePickerVisibility(false)}
+          />
 
-          {showTimePicker && (
-            <DateTimePicker
-              value={dueDate}
-              mode="time"
-              display="clock"
-              is24Hour={true}
-              onChange={handleTimeChange}
-            />
-          )}
-          </View>
           <View style={petProfileStyle.buttonProfileContainer}>
-            <TouchableOpacity style = {loginStyles.button} onPress={addUserData}><Text>Add Reminder</Text></TouchableOpacity> 
-            <TouchableOpacity style = {loginStyles.buttonCancel} onPress={handleOnClose} ><Text>Cancel</Text></TouchableOpacity>
+            <TouchableOpacity style={loginStyles.button} onPress={addUserData}>
+              <Text style={loginStyles.buttonText}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={loginStyles.buttonCancel}
+              onPress={handleOnClose}
+            >
+              <Text style={loginStyles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
     </Modal>
   );
 };
-

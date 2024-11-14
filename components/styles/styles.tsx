@@ -176,6 +176,7 @@ export const petProfileStyle = StyleSheet.create({
     width: "100%",
     marginTop: "auto",
     paddingVertical: 20,
+    color: primary,
   },
 
   closeButton: {
@@ -183,6 +184,7 @@ export const petProfileStyle = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
+    color: primary,
   },
   buttonText: {
     color: "white",
@@ -252,6 +254,7 @@ export const calendarStyle = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
+    backgroundColor: primary,
   },
 });
 export const calendarModalStyle = StyleSheet.create({
@@ -384,8 +387,8 @@ export const loginStyles = StyleSheet.create({
   button: {
     backgroundColor: buttonPrimary,
     padding: 15,
+    color: primary,
     borderRadius: 5,
-    alignItems: "center",
     borderColor: "black",
     borderWidth: 1,
   },
@@ -395,12 +398,14 @@ export const loginStyles = StyleSheet.create({
   },
   buttonCancel: {
     backgroundColor: "#f44336",
+    color: primary,
     padding: 15,
     borderRadius: 5,
     alignItems: "center",
   },
   addButton: {
     padding: 15,
+    margin: 5,
     borderRadius: 5,
     alignItems: "center",
     borderColor: "black",

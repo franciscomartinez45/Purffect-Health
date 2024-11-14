@@ -24,6 +24,7 @@ interface RemindersByDate {
 
 export const PetCalendar = () => {
   const [reminders, setReminders] = useState<RemindersByDate>({});
+  const reminderList = reminders;
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { currentUser } = getAuth();

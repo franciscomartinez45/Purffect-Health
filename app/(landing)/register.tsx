@@ -1,6 +1,6 @@
 import { TextInput, Text, TouchableOpacity } from "react-native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { loginStyles } from "@/components/styles/styles";
+import { loginStyles } from "../../components/styles/styles";
 import { useState } from "react";
 import { router } from "expo-router";
 import { doc, setDoc } from "firebase/firestore";

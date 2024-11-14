@@ -9,12 +9,13 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import { loginStyles, showPetsStyle } from "./styles/styles";
+import { loginStyles, primary, showPetsStyle } from "./styles/styles";
 import { getAuth } from "firebase/auth";
 import { addDoc, collection, doc } from "firebase/firestore";
 import { db } from "@/firebaseConfig.js";
 import * as ImagePicker from "expo-image-picker";
 import { petProfileStyle } from "./styles/styles";
+import { IconSymbol } from "./ui/IconSymbol";
 interface AddPetModalProps {
   visible: boolean;
   onClose: () => void;
@@ -142,7 +143,8 @@ export const AddPetModal = (props: AddPetModalProps) => {
             placeholderTextColor={"black"}
           />
           <TouchableOpacity style={loginStyles.button} onPress={pickImage}>
-            <Text style={loginStyles.buttonText}>Pick image</Text>
+            <Text style={loginStyles.buttonText}>Upload Image</Text>
+            <IconSymbol size={28} name="square.and.arrow.up" color={primary} />;
           </TouchableOpacity>
           <View style={petProfileStyle.buttonContainer}>
             <TouchableOpacity style={loginStyles.button} onPress={handleAddPet}>

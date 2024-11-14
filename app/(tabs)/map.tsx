@@ -1,14 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, ActivityIndicator, Linking, TouchableOpacity } from 'react-native';
-import MapView, { Marker, Callout } from 'react-native-maps';
-import { search } from '@/serpService'; 
-import { mapStyles } from '@/components/styles/styles';
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  Linking,
+  TouchableOpacity,
+} from "react-native";
+import MapView, { Marker, Callout } from "react-native-maps";
+import { search } from "../../serpService";
+import { mapStyles } from "@/components/styles/styles";
 
 export default function profileScreen() {
   const [results, setResults] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [region, setRegion] = useState({
-    latitude: 33.827820,
+    latitude: 33.82782,
     longitude: -118.272346,
     latitudeDelta: 0.1,
     longitudeDelta: 0.1,
@@ -19,9 +26,11 @@ export default function profileScreen() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const location = '@33.827820,-118.272346,14z'; 
+      const location = "@33.827820,-118.272346,14z";
       const data = await search(location);
-      const results = (data?.local_results || []).sort((a: { rating: number; }, b: { rating: number; }) => b.rating - a.rating);
+      const results = (data?.local_results || []).sort(
+        (a: { rating: number }, b: { rating: number }) => b.rating - a.rating
+      );
       setResults(results);
       setLoading(false);
     };
@@ -29,7 +38,7 @@ export default function profileScreen() {
     fetchData();
   }, []);
 
-    const openDirections = (latitude: number, longitude: number) => {
+  const openDirections = (latitude: number, longitude: number) => {
     const latitudeString = latitude.toString();
     const longitudeString = longitude.toString();
     const url = `http://maps.apple.com/?daddr=${latitudeString},${longitudeString}`;
@@ -56,10 +65,10 @@ export default function profileScreen() {
 
   return (
     <View style={mapStyles.container}>
-      <MapView
+      {/* <MapView
         style={mapStyles.map}
-        region={region} 
-        onRegionChangeComplete={(newRegion) => setRegion(newRegion)} 
+        region={region}
+        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
       >
         {results.map((item) => (
           <Marker
@@ -70,20 +79,31 @@ export default function profileScreen() {
             }}
             title={item.title}
             description={item.address}
-            pinColor={selectedPlace?.place_id === item.place_id ? 'blue' : 'red'} 
-            onPress={() => setSelectedPlace(item)} 
+            pinColor={
+              selectedPlace?.place_id === item.place_id ? "blue" : "red"
+            }
+            onPress={() => setSelectedPlace(item)}
           >
             <Callout>
               <View style={mapStyles.calloutContainer}>
                 <Text style={mapStyles.calloutTitle}>{item.title}</Text>
                 <Text style={mapStyles.calloutText}>{item.address}</Text>
-                <Text style={mapStyles.calloutText}>Rating: {item.rating} stars</Text>
+                <Text style={mapStyles.calloutText}>
+                  Rating: {item.rating} stars
+                </Text>
 
                 <TouchableOpacity
                   style={mapStyles.directionsButton}
-                  onPress={() => openDirections(item.gps_coordinates.latitude, item.gps_coordinates.longitude)}
+                  onPress={() =>
+                    openDirections(
+                      item.gps_coordinates.latitude,
+                      item.gps_coordinates.longitude
+                    )
+                  }
                 >
-                  <Text style={mapStyles.directionsButtonText}>Get Directions</Text>
+                  <Text style={mapStyles.directionsButtonText}>
+                    Get Directions
+                  </Text>
                 </TouchableOpacity>
               </View>
             </Callout>
@@ -104,8 +124,7 @@ export default function profileScreen() {
           </TouchableOpacity>
         )}
         style={mapStyles.list}
-      />
+      /> */}
     </View>
   );
-};
-
+}
