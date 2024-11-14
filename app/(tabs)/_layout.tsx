@@ -1,9 +1,8 @@
-import { router, Tabs, useRouter } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { Platform, Text } from "react-native";
 import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
-
 import { getAuth } from "firebase/auth";
 import { buttonPrimary, headerBackground } from "@/components/styles/styles";
 
@@ -13,7 +12,7 @@ export default function TabLayout() {
   const router = useRouter();
 
   useEffect(() => {
-    setIsMounted(true); // Set to true after the initial render
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {

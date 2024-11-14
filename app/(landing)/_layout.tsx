@@ -1,4 +1,4 @@
-import { Slot, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import {
   buttonPrimary,

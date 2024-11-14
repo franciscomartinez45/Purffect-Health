@@ -19,6 +19,7 @@ import { db } from "@/firebaseConfig.js";
 import * as ImagePicker from "expo-image-picker";
 import { petProfileStyle } from "../../components/styles/styles";
 import { IconSymbol } from "../../components/ui/IconSymbol";
+import { useRouter } from "expo-router";
 
 export default function AddPet() {
   const [petName, setPetName] = useState("");
@@ -26,6 +27,7 @@ export default function AddPet() {
   const [weight, setWeight] = useState("");
   const { currentUser } = getAuth();
   const [image, setImage] = useState<string | null>(null);
+  const router = useRouter();
   const addPet = async () => {
     if (currentUser) {
       if (!petName.trim()) {
@@ -61,6 +63,7 @@ export default function AddPet() {
         Alert.alert("Success!", "Pet  Succesfully Added!", [
           { text: "OK", style: "cancel" },
         ]);
+        router.push("/(tabs)");
       } catch (err) {
         console.error("Error adding reminder:", err);
       }
@@ -69,7 +72,7 @@ export default function AddPet() {
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ["images", "videos"],
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
