@@ -4,7 +4,7 @@ import * as Device from "expo-device";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import axios from "axios";
-import { GOOGLE_API_KEY } from "@env";
+import Constants from "expo-constants";
 
 export default function App() {
   const [locations, setLocations] = useState<any[] | []>([]);
@@ -35,9 +35,13 @@ export default function App() {
               location: `${latitude},${longitude}`,
               radius: 3000,
               type: "veterinary_care",
-              key: GOOGLE_API_KEY,
+              key: Constants.manifest2?.extra?.expoClient?.extra
+                ?.GOOGLE_API_KEY,
             },
           }
+        );
+        console.log(
+          Constants.manifest2?.extra?.expoClient?.extra?.GOOGLE_API_KEY
         );
         if (response.data.results) {
           const filteredLocations = response.data.results.filter(
@@ -59,8 +63,8 @@ export default function App() {
       region={{
         latitude: latitude,
         longitude: longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 0.02,
+        longitudeDelta: 0.01,
       }}
     >
       <Marker
