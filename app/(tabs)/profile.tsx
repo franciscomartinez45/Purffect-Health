@@ -1,8 +1,15 @@
 import { useState, useEffect } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { getAuth, updateEmail, updatePassword } from "firebase/auth";
+import { getAuth, signOut, updateEmail, updatePassword } from "firebase/auth";
 import { db } from "@/firebaseConfig";
-import { View, Text, TextInput, Modal, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Modal,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import {
   loginStyles,
   petProfileStyle,
@@ -46,7 +53,14 @@ export default function UserProfileScreen() {
       }
     }
   };
-
+  const handleSignOut = () => {
+    signOut(getAuth());
+    Alert.alert(
+      "Signed Out",
+      "User has been logged out, redirected to landing page",
+      [{ text: "OK" }]
+    );
+  };
   return (
     <View style={profileSettings.modalContainer}>
       <Text style={profileSettings.title}>Information</Text>
@@ -79,7 +93,9 @@ export default function UserProfileScreen() {
       />
 
       <View style={petProfileStyle.buttonProfileContainer}>
-        <View></View>
+        <TouchableOpacity style={loginStyles.button} onPress={handleSignOut}>
+          <Text style={loginStyles.buttonText}>Sign out</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={loginStyles.button} onPress={handleUpdate}>
           <Text style={loginStyles.buttonText}>Submit</Text>
         </TouchableOpacity>

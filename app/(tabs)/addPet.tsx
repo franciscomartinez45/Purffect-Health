@@ -49,23 +49,21 @@ export default function AddPet() {
       }
 
       try {
-        const reminder = {
+        const Pet = {
           name: petName,
           age: age,
           weight: weight,
           uri: image,
         };
-
         const userRef = doc(db, "user", currentUser.uid);
         const PetsRef = collection(userRef, "pets");
-
-        await addDoc(PetsRef, reminder);
+        await addDoc(PetsRef, Pet);
         Alert.alert("Success!", "Pet  Succesfully Added!", [
           { text: "OK", style: "cancel" },
         ]);
         router.push("/(tabs)");
       } catch (err) {
-        console.error("Error adding reminder:", err);
+        console.error("Error adding pet:", err);
       }
     }
   };
@@ -117,7 +115,7 @@ export default function AddPet() {
           returnKeyType="done"
           returnKeyLabel="Done"
         />
-        <Text style={profileSettings.label}>First Name</Text>
+        <Text style={profileSettings.label}>Age:</Text>
         <TextInput
           placeholder="Age"
           value={age}
@@ -127,7 +125,7 @@ export default function AddPet() {
           placeholderTextColor={"black"}
           returnKeyType="done"
         />
-        <Text style={profileSettings.label}>First Name</Text>
+        <Text style={profileSettings.label}>Weight:</Text>
         <TextInput
           placeholder="Weight"
           value={weight}

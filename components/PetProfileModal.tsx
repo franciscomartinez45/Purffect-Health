@@ -3,9 +3,9 @@ import { Modal, View, Text, Image, TouchableOpacity } from "react-native";
 import { AddReminder } from "./AddReminder";
 import { PetReminders } from "./Reminders";
 import { Pet } from "@/components/PetProfiles";
-import { petProfileStyle, primary, showPetsStyle } from "./styles/styles";
+import { petProfileStyle, showPetsStyle } from "./styles/styles";
 import { loginStyles } from "./styles/styles";
-import { IconSymbol } from "./ui/IconSymbol";
+
 interface PetProfileModalProps {
   visible: boolean;
   onClose: () => void;

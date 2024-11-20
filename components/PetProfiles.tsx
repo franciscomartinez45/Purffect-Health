@@ -1,19 +1,13 @@
-import {PetCalendar} from "@/components/PetCalendar";
 import { PetProfileModal } from "./PetProfileModal";
 import { db } from "../firebaseConfig";
 import { petProfileStyle, showPetsStyle } from "./styles/styles";
 import { getAuth } from "firebase/auth";
 import { collection, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Image
-} from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export interface Pet {
-  
   name: string;
   weight: string;
   age: string;
@@ -22,26 +16,26 @@ export interface Pet {
 }
 
 export function ShowPets() {
-  const [reminders, setReminders] = useState<Pet[]>([]);
-  const {currentUser } = getAuth();
+  const [pets, setReminders] = useState<Pet[]>([]);
+  const { currentUser } = getAuth();
   const [isModalVisible, setModalVisible] = useState(false);
-  const [currentPet,setPet]=useState<Pet | null>(null)
+  const [currentPet, setPet] = useState<Pet | null>(null);
   const getPets = () => {
     if (currentUser) {
       try {
-        const remindersRef = collection(db, "user", currentUser.uid, "pets");
-        const unsubscribe = onSnapshot(remindersRef, (snapshot) => {
-          const remindersList: Pet[] = [];
+        const petsRef = collection(db, "user", currentUser.uid, "pets");
+        const unsubscribe = onSnapshot(petsRef, (snapshot) => {
+          const petList: Pet[] = [];
           snapshot.forEach((doc) => {
-            remindersList.push({
+            petList.push({
               id: doc.id,
               name: doc.data().name,
               weight: doc.data().weight,
               age: doc.data().age,
-              uri: doc.data().uri
+              uri: doc.data().uri,
             });
           });
-          setReminders(remindersList);
+          setReminders(petList);
         });
         return unsubscribe;
       } catch (err) {
@@ -54,8 +48,8 @@ export function ShowPets() {
     const unsubscribe = getPets();
     return () => unsubscribe && unsubscribe();
   }, []);
-  const handleProfile = (item: Pet) => {
-    setPet(item);
+  const handleProfile = (pet: Pet) => {
+    setPet(pet);
     setModalVisible(true);
   };
   const handleCloseModal = () => {
@@ -64,12 +58,16 @@ export function ShowPets() {
   return (
     <SafeAreaView>
       <View style={showPetsStyle.container}>
-      {reminders.map((item) => (
-        <TouchableOpacity key={item.id} onPress={() => handleProfile(item)} style={petProfileStyle.profileButton}>
-           <View style={showPetsStyle.circleButton}>
-              {item.uri ? ( 
+        {pets.map((pet) => (
+          <TouchableOpacity
+            key={pet.id}
+            onPress={() => handleProfile(pet)}
+            style={petProfileStyle.profileButton}
+          >
+            <View style={showPetsStyle.circleButton}>
+              {pet.uri ? (
                 <Image
-                  source={{ uri: item.uri }} 
+                  source={{ uri: pet.uri }}
                   style={showPetsStyle.imageProfile}
                   resizeMode="cover"
                 />
@@ -77,19 +75,17 @@ export function ShowPets() {
                 <></>
               )}
             </View>
-        </TouchableOpacity>
-      ))}
-    </View>
-    
-    {currentPet &&
-      <PetProfileModal
-        visible={isModalVisible}
-        onClose={handleCloseModal}
-        pet={currentPet}
-      ></PetProfileModal>
-    }
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {currentPet && (
+        <PetProfileModal
+          visible={isModalVisible}
+          onClose={handleCloseModal}
+          pet={currentPet}
+        ></PetProfileModal>
+      )}
     </SafeAreaView>
   );
 }
-
-

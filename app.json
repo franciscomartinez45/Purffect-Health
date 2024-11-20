@@ -8,8 +8,12 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "AIzaSyC49Way63Tv702qvuS0BCeA_2w_dmzbkiY"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,6 +25,12 @@
       "output": "static"
     },
     "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
       "expo-router",
       [
         "expo-image-picker",

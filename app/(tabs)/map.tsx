@@ -1,130 +1,98 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  Linking,
-  TouchableOpacity,
-} from "react-native";
-import MapView, { Marker, Callout } from "react-native-maps";
-import { search } from "../../serpService";
-import { mapStyles } from "@/components/styles/styles";
+import React, { useState, useEffect } from "react";
+import { Platform, Text, View, StyleSheet } from "react-native";
+import * as Device from "expo-device";
+import * as Location from "expo-location";
+import MapView, { Marker } from "react-native-maps";
+import axios from "axios";
 
-export default function profileScreen() {
-  const [results, setResults] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [region, setRegion] = useState({
-    latitude: 33.82782,
-    longitude: -118.272346,
-    latitudeDelta: 0.1,
-    longitudeDelta: 0.1,
-  });
-
-  const [selectedPlace, setSelectedPlace] = useState<any>(null);
+export default function App() {
+  const [locations, setLocations] = useState<any[] | []>([]);
+  const [latitude, setLatude] = useState<number>(37.78825);
+  const [longitude, setLongitude] = useState<number>(-122.4324);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const location = "@33.827820,-118.272346,14z";
-      const data = await search(location);
-      const results = (data?.local_results || []).sort(
-        (a: { rating: number }, b: { rating: number }) => b.rating - a.rating
-      );
-      setResults(results);
-      setLoading(false);
-    };
+    async function getCurrentLocation() {
+      if (Platform.OS === "android" && !Device.isDevice) {
+        setErrorMsg(
+          "Oops, this will not work on Snack in an Android Emulator. Try it on your device!"
+        );
+        return;
+      }
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+      try {
+        let location = await Location.getCurrentPositionAsync({});
+        setLatude(location.coords.latitude);
+        setLongitude(location.coords.longitude);
+        const response = await axios.get(
+          `https://maps.googleapis.com/maps/api/place/nearbysearch/json`,
+          {
+            params: {
+              location: `${latitude},${longitude}`,
+              radius: 500,
+              type: "fast-food",
+              key: "AIzaSyDMbL1B8Itr9z61KzsOS0bur77I6yOu2bg",
+            },
+          }
+        );
+        if (response.data.results) {
+          setLocations(response.data.results);
+          console.log(locations);
+        }
+      } catch (Error) {
+        console.log(Error);
+      }
+    }
 
-    fetchData();
+    getCurrentLocation();
   }, []);
 
-  const openDirections = (latitude: number, longitude: number) => {
-    const latitudeString = latitude.toString();
-    const longitudeString = longitude.toString();
-    const url = `http://maps.apple.com/?daddr=${latitudeString},${longitudeString}`;
-    Linking.openURL(url).catch((err) => console.error(err));
-  };
-
-  const handleFlatListItemPress = (place: any) => {
-    setSelectedPlace(place);
-    setRegion({
-      latitude: place.gps_coordinates.latitude,
-      longitude: place.gps_coordinates.longitude,
-      latitudeDelta: 0.1,
-      longitudeDelta: 0.1,
-    });
-  };
-
-  if (loading) {
-    return (
-      <View style={mapStyles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
-
   return (
-    <View style={mapStyles.container}>
-      {/* <MapView
-        style={mapStyles.map}
-        region={region}
-        onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
-      >
-        {results.map((item) => (
-          <Marker
-            key={item.place_id}
-            coordinate={{
-              latitude: item.gps_coordinates.latitude,
-              longitude: item.gps_coordinates.longitude,
-            }}
-            title={item.title}
-            description={item.address}
-            pinColor={
-              selectedPlace?.place_id === item.place_id ? "blue" : "red"
-            }
-            onPress={() => setSelectedPlace(item)}
-          >
-            <Callout>
-              <View style={mapStyles.calloutContainer}>
-                <Text style={mapStyles.calloutTitle}>{item.title}</Text>
-                <Text style={mapStyles.calloutText}>{item.address}</Text>
-                <Text style={mapStyles.calloutText}>
-                  Rating: {item.rating} stars
-                </Text>
+    <MapView
+      style={styles.container}
+      region={{
+        latitude: latitude,
+        longitude: longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      }}
+    >
+      <Marker
+        coordinate={{ latitude, longitude }}
+        title="Your Location"
+        pinColor="blue"
+      />
 
-                <TouchableOpacity
-                  style={mapStyles.directionsButton}
-                  onPress={() =>
-                    openDirections(
-                      item.gps_coordinates.latitude,
-                      item.gps_coordinates.longitude
-                    )
-                  }
-                >
-                  <Text style={mapStyles.directionsButtonText}>
-                    Get Directions
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
-      </MapView>
-
-      <FlatList
-        data={results}
-        keyExtractor={(item) => item.place_id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleFlatListItemPress(item)}>
-            <View style={mapStyles.resultItem}>
-              <Text>{item.title}</Text>
-              <Text>{item.address}</Text>
-              <Text>{item.rating} stars</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-        style={mapStyles.list}
-      /> */}
-    </View>
+      {locations.map((location, index) => (
+        <Marker
+          key={index}
+          coordinate={{
+            latitude: location.geometry.location.lat,
+            longitude: location.geometry.location.lng,
+          }}
+          title={location.name}
+          description={location.vicinity}
+        />
+      ))}
+    </MapView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+
+    width: 500,
+    height: 900,
+  },
+  paragraph: {
+    fontSize: 18,
+    textAlign: "center",
+  },
+});

@@ -11,6 +11,7 @@ import { Platform } from "react-native";
 export default function LandingScreen() {
   return (
     <Tabs
+      initialRouteName="register"
       screenOptions={{
         tabBarActiveTintColor: "black",
         headerShown: true,

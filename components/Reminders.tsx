@@ -6,10 +6,11 @@ import { FlatList, View, Text } from "react-native";
 import { reminderStyles } from "./styles/styles";
 
 interface Reminder {
-  id: string;
-  description: string;
   dateTime: string;
+  description: string;
+  id: string;
 }
+
 interface PetRemindersProp {
   petId: string;
 }
@@ -47,22 +48,22 @@ export const PetReminders = (props: PetRemindersProp) => {
     }
   };
   useEffect(() => {
-   
     const unsubscribe = getReminders();
     return () => unsubscribe && unsubscribe();
   }, []);
 
   return (
-    
     <FlatList
       data={reminders}
       keyExtractor={(item) => item.id}
       contentContainerStyle={reminderStyles.remindersListContent}
-      showsVerticalScrollIndicator={true} 
-      nestedScrollEnabled={true} 
+      showsVerticalScrollIndicator={true}
+      nestedScrollEnabled={true}
       renderItem={({ item }) => (
         <View style={reminderStyles.reminderItem} key={item.id}>
-          <Text style={reminderStyles.reminderDescription}>Description: {item.description}</Text>
+          <Text style={reminderStyles.reminderDescription}>
+            Description: {item.description}
+          </Text>
           <Text style={reminderStyles.reminderDate}>Date: {item.dateTime}</Text>
           <Text style={reminderStyles.reminderId}>Id: {item.id}</Text>
         </View>
@@ -71,4 +72,3 @@ export const PetReminders = (props: PetRemindersProp) => {
     />
   );
 };
-

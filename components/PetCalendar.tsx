@@ -9,13 +9,13 @@ import {
   calendarModalStyle,
   calendarStyle,
   primary,
-  textColor,
 } from "./styles/styles";
 
 interface Reminder {
   date: string;
   description: string;
   petName: string;
+  id: string;
 }
 
 interface RemindersByDate {
@@ -24,7 +24,6 @@ interface RemindersByDate {
 
 export const PetCalendar = () => {
   const [reminders, setReminders] = useState<RemindersByDate>({});
-  const reminderList = reminders;
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const { currentUser } = getAuth();
@@ -56,7 +55,6 @@ export const PetCalendar = () => {
             const data = doc.data() as Reminder;
             const date = convertDate(data.date);
             const reminderDescription = data.description;
-
             if (!remindersData[date]) {
               remindersData[date] = [];
             }
@@ -126,7 +124,7 @@ export const PetCalendar = () => {
               {selectedDate && reminders[selectedDate]?.length ? (
                 reminders[selectedDate].map((reminder, index) => (
                   <Text key={index} style={calendarModalStyle.reminderText}>
-                    • {reminder.petName}: {reminder.description}
+                    • {reminder.petName}: {reminder.description} @ {}
                   </Text>
                 ))
               ) : (
