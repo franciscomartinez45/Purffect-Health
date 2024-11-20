@@ -68,7 +68,8 @@
     "jest-expo": "^52.0.2",
     "metro-react-native-babel-preset": "^0.77.0",
     "react-test-renderer": "18.3.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "@react-native-community/cli": "latest"
   },
   "private": true
 }

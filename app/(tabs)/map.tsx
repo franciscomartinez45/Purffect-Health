@@ -4,13 +4,13 @@ import * as Device from "expo-device";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import axios from "axios";
+import { GOOGLE_API_KEY } from "@env";
 
 export default function App() {
   const [locations, setLocations] = useState<any[] | []>([]);
   const [latitude, setLatude] = useState<number>(37.78825);
   const [longitude, setLongitude] = useState<number>(-122.4324);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
   useEffect(() => {
     async function getCurrentLocation() {
       if (Platform.OS === "android" && !Device.isDevice) {
@@ -33,24 +33,26 @@ export default function App() {
           {
             params: {
               location: `${latitude},${longitude}`,
-              radius: 500,
-              type: "fast-food",
-              key: "AIzaSyDMbL1B8Itr9z61KzsOS0bur77I6yOu2bg",
+              radius: 3000,
+              type: "veterinary_care",
+              key: GOOGLE_API_KEY,
             },
           }
         );
         if (response.data.results) {
-          setLocations(response.data.results);
-          console.log(locations);
+          const filteredLocations = response.data.results.filter(
+            (place: { types: string | string[] }) =>
+              place.types.includes("veterinary_care")
+          );
+          setLocations(filteredLocations);
+          console.log(locations.length);
         }
       } catch (Error) {
         console.log(Error);
       }
     }
-
     getCurrentLocation();
   }, []);
-
   return (
     <MapView
       style={styles.container}
@@ -66,7 +68,6 @@ export default function App() {
         title="Your Location"
         pinColor="blue"
       />
-
       {locations.map((location, index) => (
         <Marker
           key={index}
@@ -81,18 +82,12 @@ export default function App() {
     </MapView>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-
     width: 500,
     height: 900,
-  },
-  paragraph: {
-    fontSize: 18,
-    textAlign: "center",
   },
 });
