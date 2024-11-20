@@ -3,10 +3,12 @@ import { ShowPets } from "@/components/PetProfiles";
 import React, { useEffect, useState } from "react";
 
 import { indexStyles } from "@/components/styles/styles";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { getAuth } from "firebase/auth";
 import { db } from "@/firebaseConfig";
 import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { EditPets } from "@/components/editPetModal";
+import { IconSymbol } from "@/components/ui/IconSymbol";
 
 export interface UserData {
   firstName: string;
@@ -18,6 +20,7 @@ export default function indexScreen() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [userHasPets, setUserPets] = useState<boolean>(false);
   const { currentUser } = getAuth();
+  const [editModalVisible, setModalVisible] = useState<boolean>(false);
 
   const getUserData = async () => {
     if (currentUser) {
@@ -38,7 +41,12 @@ export default function indexScreen() {
   useEffect(() => {
     getUserData();
   }, []);
-
+  const handleOnPress = () => {
+    setModalVisible(true);
+  };
+  const handleCloseModal = () => {
+    setModalVisible(false);
+  };
   return (
     <View style={indexStyles.container}>
       {!userHasPets ? (
@@ -58,7 +66,10 @@ export default function indexScreen() {
           <Text style={indexStyles.smallText}>Your Pets:</Text>
         </View>
       )}
-
+      <TouchableOpacity onPress={handleOnPress} style={indexStyles.penButton}>
+        <IconSymbol size={30} name="square.and.pencil" color={"white"} />
+      </TouchableOpacity>
+      <EditPets onClose={handleCloseModal} visible={editModalVisible} />
       <ShowPets />
     </View>
   );

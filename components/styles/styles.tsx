@@ -37,10 +37,6 @@ export const petProfileStyle = StyleSheet.create({
   reminderText: {
     fontSize: 14,
   },
-  noReminderText: {
-    fontSize: 14,
-    color: "gray",
-  },
   modalBackground: {
     flex: 1,
     justifyContent: "center",
@@ -243,6 +239,22 @@ export const reminderStyles = StyleSheet.create({
     fontSize: 12,
     color: "#bdc3c7",
   },
+  deleteButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "red",
+    borderRadius: 15,
+    width: 30,
+    height: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  deleteButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 export const calendarStyle = StyleSheet.create({
   calendar: {
@@ -376,9 +388,9 @@ export const loginStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 15,
-    marginBottom: 15,
+    marginBottom: 5,
     backgroundColor: textInputColor,
-    shadowRadius: 5,
+    shadowRadius: 2,
     shadowOpacity: 5,
   },
   inputContainer: {
@@ -445,6 +457,22 @@ export const indexStyles = StyleSheet.create({
   petText: {
     fontSize: 25,
     fontWeight: "100",
+  },
+  penButton: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: buttonPrimary,
+    borderRadius: 50,
+    width: 90,
+    height: 90,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  penIcon: {
+    fontSize: 24,
+    color: "white",
   },
 });
 

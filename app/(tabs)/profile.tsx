@@ -2,14 +2,7 @@ import { useState, useEffect } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getAuth, signOut, updateEmail, updatePassword } from "firebase/auth";
 import { db } from "@/firebaseConfig";
-import {
-  View,
-  Text,
-  TextInput,
-  Modal,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, Alert } from "react-native";
 import {
   loginStyles,
   petProfileStyle,
@@ -79,8 +72,7 @@ export default function UserProfileScreen() {
         style={profileSettings.input}
         keyboardType="email-address"
         onChangeText={(text) => setNewEmail(text.toLowerCase())}
-        placeholder="Email"
-        placeholderTextColor={"black"}
+        placeholder="e.g. AdaLovelace@toromail.csudh.edu"
       />
 
       <Text style={profileSettings.label}>New Password</Text>

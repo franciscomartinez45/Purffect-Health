@@ -16,10 +16,11 @@ export interface Pet {
 }
 
 export function ShowPets() {
-  const [pets, setReminders] = useState<Pet[]>([]);
+  
   const { currentUser } = getAuth();
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentPet, setPet] = useState<Pet | null>(null);
+  const [pets, setReminders] = useState<Pet[]>([]);
   const getPets = () => {
     if (currentUser) {
       try {
@@ -89,3 +90,4 @@ export function ShowPets() {
     </SafeAreaView>
   );
 }
+

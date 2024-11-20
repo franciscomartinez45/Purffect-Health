@@ -5,6 +5,7 @@ import { HapticTab } from "@/components/HapticTab";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 import { getAuth } from "firebase/auth";
 import { buttonPrimary, headerBackground } from "@/components/styles/styles";
+import { app } from "@/firebaseConfig";
 
 export default function TabLayout() {
   const [isMounted, setIsMounted] = useState(false);
@@ -16,7 +17,7 @@ export default function TabLayout() {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = getAuth().onAuthStateChanged((user) => {
+    const unsubscribe = getAuth(app).onAuthStateChanged((user) => {
       setIsLoading(false);
       if (isMounted && !user) {
         router.replace("/(landing)/login");

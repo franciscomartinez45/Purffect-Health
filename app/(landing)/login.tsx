@@ -4,7 +4,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Text } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
-import { loginStyles } from "../../components/styles/styles";
+import { loginStyles, profileSettings } from "../../components/styles/styles";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState<string>("");
@@ -25,17 +25,17 @@ export default function LoginScreen() {
     <SafeAreaView style={loginStyles.container}>
       <Text style={loginStyles.welcomeText}>Purrfect Health</Text>
       <Text style={loginStyles.title}>Welcome Back!</Text>
+      <Text style={profileSettings.label}>Email:</Text>
       <TextInput
         style={loginStyles.input}
-        placeholder="Email"
-        placeholderTextColor={"black"}
+        placeholder="e.g. AdaLovelace@toromail.csudh.edu"
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text.toLowerCase())}
       />
+      <Text style={profileSettings.label}>Password</Text>
       <TextInput
         style={loginStyles.input}
         placeholder="Password"
-        placeholderTextColor={"black"}
         secureTextEntry
         onChangeText={(text) => setPassword(text)}
       />

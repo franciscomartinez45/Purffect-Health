@@ -1,6 +1,6 @@
 import { TextInput, Text, TouchableOpacity } from "react-native";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { loginStyles } from "../../components/styles/styles";
+import { loginStyles, profileSettings } from "../../components/styles/styles";
 import { useState } from "react";
 import { router } from "expo-router";
 import { doc, setDoc } from "firebase/firestore";
@@ -39,32 +39,29 @@ export default function RegisterScreen() {
       <Text style={loginStyles.title}>
         New to the App? Register for a free account!
       </Text>
-
+      <Text style={profileSettings.label}>First Name:</Text>
       <TextInput
         style={loginStyles.input}
         onChangeText={(text) => setFirstName(text)}
-        placeholder="First Name"
-        placeholderTextColor={"black"}
+        placeholder="Alan"
       />
+      <Text style={profileSettings.label}>Last Name:</Text>
       <TextInput
         style={loginStyles.input}
         onChangeText={(text) => setLastName(text)}
-        placeholder="Last Name"
-        placeholderTextColor={"black"}
+        placeholder="Turing"
       />
-
+      <Text style={profileSettings.label}>Email:</Text>
       <TextInput
         style={loginStyles.input}
-        placeholder="Email"
-        placeholderTextColor={"black"}
+        placeholder="e.g. AlanTuring110@toromail.csudh.edu"
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text)}
       />
-
+      <Text style={profileSettings.label}>Password</Text>
       <TextInput
         style={loginStyles.input}
         placeholder="Password"
-        placeholderTextColor={"black"}
         secureTextEntry
         onChangeText={(text) => setPassword(text)}
       />
