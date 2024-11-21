@@ -13,13 +13,14 @@ import {
 
 interface Reminder {
   date: string;
+  time: string;
   description: string;
   petName: string;
   id: string;
 }
 
 interface RemindersByDate {
-  [date: string]: { petName: string; description: string }[];
+  [date: string]: { petName: string; description: string; time: string }[];
 }
 
 export const PetCalendar = () => {
@@ -38,8 +39,8 @@ export const PetCalendar = () => {
     if (!currentUser) return;
 
     const petsCollection = collection(db, `user/${currentUser.uid}/pets`);
-
-    const unsubscribe = onSnapshot(petsCollection, (petsSnapshot) => {
+    const unsubscribePets = onSnapshot(petsCollection, (petsSnapshot) => {
+      const unsubscribeReminders: (() => void)[] = [];
       const remindersData: RemindersByDate = {};
 
       petsSnapshot.forEach((petDoc) => {
@@ -50,26 +51,41 @@ export const PetCalendar = () => {
           "reminders"
         );
 
-        onSnapshot(remindersCollection, (remindersSnapshot) => {
-          remindersSnapshot.forEach((doc) => {
-            const data = doc.data() as Reminder;
-            const date = convertDate(data.date);
-            const reminderDescription = data.description;
-            if (!remindersData[date]) {
-              remindersData[date] = [];
-            }
-            remindersData[date].push({
-              petName,
-              description: reminderDescription,
+        const unsubscribeReminder = onSnapshot(
+          remindersCollection,
+          (remindersSnapshot) => {
+            remindersSnapshot.forEach((doc) => {
+              const data = doc.data() as Reminder;
+              const date = convertDate(data.date);
+              const reminderDescription = data.description;
+              const reminderTime = data.time;
+
+              if (!remindersData[date]) {
+                remindersData[date] = [];
+              }
+              remindersData[date].push({
+                petName,
+                description: reminderDescription,
+                time: reminderTime,
+              });
             });
-          });
-          setReminders(remindersData);
-        });
+
+            setReminders({ ...remindersData });
+          }
+        );
+
+        unsubscribeReminders.push(unsubscribeReminder);
       });
+
+      return () => {
+        unsubscribeReminders.forEach((unsubscribe) => unsubscribe());
+      };
     });
 
-    return () => unsubscribe();
-  }, [currentUser]);
+    return () => {
+      unsubscribePets();
+    };
+  }, [currentUser, db, setReminders]);
 
   const onDayPress = (day: { dateString: string }) => {
     setSelectedDate(day.dateString);
@@ -124,7 +140,8 @@ export const PetCalendar = () => {
               {selectedDate && reminders[selectedDate]?.length ? (
                 reminders[selectedDate].map((reminder, index) => (
                   <Text key={index} style={calendarModalStyle.reminderText}>
-                    • {reminder.petName}: {reminder.description} @ {}
+                    • {reminder.petName}: {reminder.description} @{" "}
+                    {reminder.time}
                   </Text>
                 ))
               ) : (

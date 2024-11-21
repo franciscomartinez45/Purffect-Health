@@ -5,12 +5,15 @@ import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import axios from "axios";
 import Constants from "expo-constants";
+import { IconSymbol } from "@/components/ui/IconSymbol";
 
 export default function App() {
   const [locations, setLocations] = useState<any[] | []>([]);
   const [latitude, setLatude] = useState<number>(37.78825);
   const [longitude, setLongitude] = useState<number>(-122.4324);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     async function getCurrentLocation() {
       if (Platform.OS === "android" && !Device.isDevice) {
@@ -28,6 +31,17 @@ export default function App() {
         let location = await Location.getCurrentPositionAsync({});
         setLatude(location.coords.latitude);
         setLongitude(location.coords.longitude);
+      } catch (Error) {
+        console.log(Error);
+      }
+    }
+    getCurrentLocation();
+  }, []);
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      setLoading(true);
+      try {
         const response = await axios.get(
           `https://maps.googleapis.com/maps/api/place/nearbysearch/json`,
           {
@@ -40,38 +54,41 @@ export default function App() {
             },
           }
         );
-        console.log(
-          Constants.manifest2?.extra?.expoClient?.extra?.GOOGLE_API_KEY
-        );
+
         if (response.data.results) {
           const filteredLocations = response.data.results.filter(
-            (place: { types: string | string[] }) =>
-              place.types.includes("veterinary_care")
+            (place: { types: string[] }) =>
+              place.types && place.types.includes("veterinary_care")
           );
           setLocations(filteredLocations);
-          console.log(locations.length);
         }
-      } catch (Error) {
-        console.log(Error);
+      } catch (error) {
+        console.error("Error fetching locations:", error);
+      } finally {
+        setLoading(false);
       }
-    }
-    getCurrentLocation();
-  }, []);
+    };
+
+    fetchLocations();
+  }, [latitude, longitude]);
+
   return (
     <MapView
-      style={styles.container}
+      style={styles.map}
       region={{
         latitude: latitude,
         longitude: longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.01,
+        latitudeDelta: 0.09,
+        longitudeDelta: 0.05,
       }}
     >
       <Marker
         coordinate={{ latitude, longitude }}
         title="Your Location"
-        pinColor="blue"
-      />
+        pinColor="green"
+      >
+        <IconSymbol name="location.north.fill" size={30} color="blue" />
+      </Marker>
       {locations.map((location, index) => (
         <Marker
           key={index}
@@ -81,13 +98,15 @@ export default function App() {
           }}
           title={location.name}
           description={location.vicinity}
-        />
+        >
+          <IconSymbol name="mappin.circle.fill" size={30} color="red" />
+        </Marker>
       ))}
     </MapView>
   );
 }
 const styles = StyleSheet.create({
-  container: {
+  map: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
