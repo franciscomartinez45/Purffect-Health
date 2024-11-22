@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Platform, Text, View, StyleSheet } from "react-native";
-import * as Device from "expo-device";
+import { StyleSheet } from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker } from "react-native-maps";
 import axios from "axios";
@@ -15,11 +14,11 @@ export default function App() {
 
   useEffect(() => {
     async function getCurrentLocation() {
-      if (Platform.OS === "android" && !Device.isDevice) {
-        return;
-      }
-
       try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          return;
+        }
         let location = await Location.getCurrentPositionAsync({});
         setLatude(location.coords.latitude);
         setLongitude(location.coords.longitude);
@@ -27,10 +26,6 @@ export default function App() {
         console.log(Error);
       }
     }
-    getCurrentLocation();
-  }, []);
-
-  useEffect(() => {
     const fetchLocations = async () => {
       setLoading(true);
       try {
@@ -60,8 +55,8 @@ export default function App() {
         setLoading(false);
       }
     };
-
     fetchLocations();
+    getCurrentLocation();
   }, [latitude, longitude]);
 
   return (
