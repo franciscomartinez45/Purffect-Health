@@ -11,22 +11,14 @@ export default function App() {
   const [locations, setLocations] = useState<any[] | []>([]);
   const [latitude, setLatude] = useState<number>(37.78825);
   const [longitude, setLongitude] = useState<number>(-122.4324);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function getCurrentLocation() {
       if (Platform.OS === "android" && !Device.isDevice) {
-        setErrorMsg(
-          "Oops, this will not work on Snack in an Android Emulator. Try it on your device!"
-        );
         return;
       }
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
+
       try {
         let location = await Location.getCurrentPositionAsync({});
         setLatude(location.coords.latitude);
@@ -47,7 +39,7 @@ export default function App() {
           {
             params: {
               location: `${latitude},${longitude}`,
-              radius: 3000,
+              radius: 4000,
               type: "veterinary_care",
               key: Constants.manifest2?.extra?.expoClient?.extra
                 ?.GOOGLE_API_KEY,

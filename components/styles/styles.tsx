@@ -243,17 +243,10 @@ export const reminderStyles = StyleSheet.create({
     position: "absolute",
     top: 10,
     right: 10,
-    backgroundColor: "red",
-    borderRadius: 15,
     width: 30,
     height: 30,
     justifyContent: "center",
     alignItems: "center",
-  },
-  deleteButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });
 export const calendarStyle = StyleSheet.create({
@@ -444,35 +437,33 @@ export const indexStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  welcomeContainer: {
+    padding: 10,
+  },
   welcomeText: {
-    fontSize: 35,
+    fontSize: 45,
+    marginBottom: 10,
+    fontWeight: "200",
+  },
+  smallTextContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderColor: "black",
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 5,
+    justifyContent: "space-between",
   },
   smallText: {
-    fontSize: 18,
-  },
-  welcomeContainer: {
-    borderBottomColor: "black",
-    borderBottomWidth: 1,
-  },
-  petText: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: "100",
   },
+
   penButton: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    backgroundColor: buttonPrimary,
-    borderRadius: 50,
-    width: 90,
-    height: 90,
+    width: 40,
+    height: 40,
     justifyContent: "center",
     alignItems: "center",
-  },
-
-  penIcon: {
-    fontSize: 24,
-    color: "white",
   },
 });
 

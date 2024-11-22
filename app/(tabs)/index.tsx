@@ -52,7 +52,7 @@ export default function indexScreen() {
       {!userHasPets ? (
         <View style={indexStyles.welcomeContainer}>
           <Text style={indexStyles.welcomeText}>
-            Welcome to Purrfect Health {userData?.firstName}
+            Welcome to Purrfect Health, {userData?.firstName}
           </Text>
           <Text style={indexStyles.smallText}>
             One stop destination for your pet needs
@@ -61,14 +61,24 @@ export default function indexScreen() {
       ) : (
         <View style={indexStyles.welcomeContainer}>
           <Text style={indexStyles.welcomeText}>
-            Welcome back {userData?.firstName}
+            Welcome back, {userData?.firstName}
           </Text>
-          <Text style={indexStyles.smallText}>Your Pets:</Text>
+
+          <View style={indexStyles.smallTextContainer}>
+            <Text style={indexStyles.smallText}>Your Pets:</Text>
+            <TouchableOpacity
+              onPress={handleOnPress}
+              style={indexStyles.penButton}
+            >
+              <IconSymbol
+                size={30}
+                name="pencil.and.ellipsis.rectangle"
+                color={"black"}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       )}
-      <TouchableOpacity onPress={handleOnPress} style={indexStyles.penButton}>
-        <IconSymbol size={30} name="square.and.pencil" color={"white"} />
-      </TouchableOpacity>
       <EditPets onClose={handleCloseModal} visible={editModalVisible} />
       <ShowPets />
     </View>

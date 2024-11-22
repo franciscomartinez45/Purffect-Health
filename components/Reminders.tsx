@@ -4,6 +4,7 @@ import { collection, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { FlatList, View, Text, TouchableOpacity, Alert } from "react-native";
 import { reminderStyles } from "./styles/styles";
+import { IconSymbol } from "./ui/IconSymbol";
 
 interface Reminder {
   dateTime: string;
@@ -110,7 +111,7 @@ export const PetReminders = (props: PetRemindersProp) => {
             style={reminderStyles.deleteButton}
             onPress={() => handleDeleteReminder(item.id)}
           >
-            <Text style={reminderStyles.deleteButtonText}>X</Text>
+            <IconSymbol size={25} name="minus.circle.fill" color={"red"} />
           </TouchableOpacity>
         </View>
       )}

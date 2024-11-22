@@ -17,6 +17,7 @@ import {
   petProfileStyle,
   reminderStyles,
 } from "./styles/styles";
+import { IconSymbol } from "./ui/IconSymbol";
 
 interface ModalProps {
   visible: boolean;
@@ -117,7 +118,11 @@ export const EditPets = (props: ModalProps) => {
                   style={reminderStyles.deleteButton}
                   onPress={() => handleDeletePet(item.id)}
                 >
-                  <Text style={reminderStyles.deleteButtonText}>X</Text>
+                  <IconSymbol
+                    size={25}
+                    name="minus.circle.fill"
+                    color={"red"}
+                  />
                 </TouchableOpacity>
               </View>
             )}
