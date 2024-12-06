@@ -45,3 +45,5 @@ app-example
 .expo
 dist/
 web-build/
+
+firebaseConfig.js
