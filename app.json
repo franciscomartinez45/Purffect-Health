@@ -8,6 +8,9 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      },
       "supportsTablet": true,
       "config": {
         "googleMapsApiKey": "AIzaSyC49Way63Tv702qvuS0BCeA_2w_dmzbkiY"
@@ -30,17 +33,17 @@
       "output": "static"
     },
     "plugins": [
-      [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
-        }
-      ],
       "expo-router",
       [
         "expo-image-picker",
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
       ]
     ],
@@ -48,7 +51,14 @@
       "typedRoutes": true
     },
     "extra": {
-      "GOOGLE_API_KEY": "AIzaSyDMbL1B8Itr9z61KzsOS0bur77I6yOu2bg"
-    }
+      "GOOGLE_API_KEY": "AIzaSyDMbL1B8Itr9z61KzsOS0bur77I6yOu2bg",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f6ee159e-e1c8-4ffd-87fb-28790182c255"
+      }
+    },
+    "owner": "fmartinez110"
   }
 }

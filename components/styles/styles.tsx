@@ -1,17 +1,17 @@
 import { Dimensions, StyleSheet } from "react-native";
 export const primary = "#ffffff";
 export const textColor = "#F4F0DB";
-export const buttonPrimary = "black";
+export const buttonPrimary = "#444444";
 export const textInputColor = "#ffffff";
 export const headerBackground = "#ffffff";
 export const tabBottomColor = "#ffffff";
 
 export const showPetsStyle = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flex: 1,
     flexWrap: "wrap",
+    flexDirection: "row",
     justifyContent: "space-between",
-    padding: 0,
   },
   circleButton: {
     width: 130,
@@ -84,8 +84,8 @@ export const petProfileStyle = StyleSheet.create({
     alignContent: "center",
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
+    fontSize: 45,
+    fontWeight: "200",
     marginBottom: 20,
     textAlign: "center",
   },
@@ -201,6 +201,15 @@ export const petProfileStyle = StyleSheet.create({
     left: "28%",
     bottom: 10,
   },
+  headerText: {
+    justifyContent: "center",
+    alignContent: "center",
+    position: "absolute",
+    top: 10,
+    fontSize: 25,
+    fontWeight: 200,
+    left: 60,
+  },
 });
 
 export const reminderStyles = StyleSheet.create({
@@ -223,8 +232,8 @@ export const reminderStyles = StyleSheet.create({
     elevation: 5,
   },
   reminderDescription: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 25,
+    fontWeight: "200",
     color: "#2c3e50",
   },
   reminderDate: {
@@ -441,16 +450,13 @@ export const indexStyles = StyleSheet.create({
     padding: 10,
   },
   welcomeText: {
-    fontSize: 45,
+    fontSize: 55,
     marginBottom: 10,
     fontWeight: "200",
   },
   smallTextContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 5,
     padding: 5,
     justifyContent: "space-between",
   },
@@ -464,6 +470,11 @@ export const indexStyles = StyleSheet.create({
     height: 40,
     justifyContent: "center",
     alignItems: "center",
+  },
+  getStartedText: {
+    paddingTop: 540,
+    fontSize: 15,
+    paddingLeft: 50,
   },
 });
 

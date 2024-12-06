@@ -6,7 +6,7 @@ import axios from "axios";
 import Constants from "expo-constants";
 import { IconSymbol } from "@/components/ui/IconSymbol";
 
-export default function App() {
+export default function MapScreen() {
   const [locations, setLocations] = useState<any[] | []>([]);
   const [latitude, setLatude] = useState<number>(37.78825);
   const [longitude, setLongitude] = useState<number>(-122.4324);
@@ -50,7 +50,7 @@ export default function App() {
           setLocations(filteredLocations);
         }
       } catch (error) {
-        console.error("Error fetching locations:", error);
+        console.error("Error:", error);
       } finally {
         setLoading(false);
       }
@@ -69,11 +69,7 @@ export default function App() {
         longitudeDelta: 0.05,
       }}
     >
-      <Marker
-        coordinate={{ latitude, longitude }}
-        title="Your Location"
-        pinColor="green"
-      >
+      <Marker coordinate={{ latitude, longitude }} title="Current Location">
         <IconSymbol name="location.north.fill" size={30} color="blue" />
       </Marker>
       {locations.map((location, index) => (

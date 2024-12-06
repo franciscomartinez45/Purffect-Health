@@ -13,6 +13,13 @@ export default function LoginScreen() {
   const handleLogin = () => {
     signInWithEmailAndPassword(getAuth(), email, password)
       .then((user) => {
+        if(!user.user.emailVerified){
+          Alert.alert(
+            "Email Verification required",
+            "Please verify your email",
+            [{ text: "OK" }]
+          );
+        }
         if (user) router.replace("/(tabs)");
       })
       .catch((Error) => {
@@ -31,6 +38,8 @@ export default function LoginScreen() {
         placeholder="e.g. AdaLovelace@toromail.csudh.edu"
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text.toLowerCase())}
+        autoCorrect={false}
+        placeholderTextColor={"#D3D3D3"}
       />
       <Text style={profileSettings.label}>Password</Text>
       <TextInput
@@ -38,6 +47,7 @@ export default function LoginScreen() {
         placeholder="Password"
         secureTextEntry
         onChangeText={(text) => setPassword(text)}
+        placeholderTextColor={"#D3D3D3"}
       />
 
       <TouchableOpacity style={loginStyles.button} onPress={handleLogin}>

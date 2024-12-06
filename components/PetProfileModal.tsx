@@ -6,7 +6,7 @@ import { Pet } from "@/components/PetProfiles";
 import { petProfileStyle, showPetsStyle } from "./styles/styles";
 import { loginStyles } from "./styles/styles";
 
-interface PetProfileModalProps {
+export interface PetProfileModalProps {
   visible: boolean;
   onClose: () => void;
   pet: Pet;
@@ -40,10 +40,10 @@ export const PetProfileModal = (props: PetProfileModalProps) => {
             <View style={petProfileStyle.petInfo}>
               <Text style={petProfileStyle.petName}>{props.pet.name}</Text>
               <Text style={petProfileStyle.petDetails}>
-                Weight: {props.pet.weight} lbs
+                Age: {props.pet.age} years
               </Text>
               <Text style={petProfileStyle.petDetails}>
-                Age: {props.pet.age} years
+                Weight: {props.pet.weight} lbs
               </Text>
             </View>
           </View>

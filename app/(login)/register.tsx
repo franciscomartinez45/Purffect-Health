@@ -1,5 +1,9 @@
-import { TextInput, Text, TouchableOpacity } from "react-native";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { TextInput, Text, TouchableOpacity, Alert } from "react-native";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { loginStyles, profileSettings } from "../../components/styles/styles";
 import { useState } from "react";
 import { router } from "expo-router";
@@ -12,6 +16,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState<string>("");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
+
   const handleRegister = () => {
     createUserWithEmailAndPassword(getAuth(), email, password)
       .then(async (userCredential) => {
@@ -22,10 +27,16 @@ export default function RegisterScreen() {
             lastName: lastName,
             email: email,
           })
-            .then(() => router.replace("/(tabs)"))
+            .then(() => router.replace("../(tabs)"))
             .catch((err) => {
               alert(err?.message);
             });
+          await sendEmailVerification(user);
+          Alert.alert(
+            "Email Verification Sent!",
+            "Email verification will be required",
+            [{ text: "OK" }]
+          );
         }
       })
       .catch((err) => {
@@ -44,12 +55,14 @@ export default function RegisterScreen() {
         style={loginStyles.input}
         onChangeText={(text) => setFirstName(text)}
         placeholder="Alan"
+        placeholderTextColor={"#D3D3D3"}
       />
       <Text style={profileSettings.label}>Last Name:</Text>
       <TextInput
         style={loginStyles.input}
         onChangeText={(text) => setLastName(text)}
         placeholder="Turing"
+        placeholderTextColor={"#D3D3D3"}
       />
       <Text style={profileSettings.label}>Email:</Text>
       <TextInput
@@ -57,6 +70,7 @@ export default function RegisterScreen() {
         placeholder="e.g. AlanTuring110@toromail.csudh.edu"
         keyboardType="email-address"
         onChangeText={(text) => setEmail(text)}
+        placeholderTextColor={"#D3D3D3"}
       />
       <Text style={profileSettings.label}>Password</Text>
       <TextInput
@@ -64,6 +78,7 @@ export default function RegisterScreen() {
         placeholder="Password"
         secureTextEntry
         onChangeText={(text) => setPassword(text)}
+        placeholderTextColor={"#D3D3D3"}
       />
       <TouchableOpacity style={loginStyles.button} onPress={handleRegister}>
         <Text style={loginStyles.buttonText}>Register</Text>

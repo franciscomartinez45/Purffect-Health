@@ -8,10 +8,14 @@ import { HapticTab } from "@/components/HapticTab";
 
 import { Platform } from "react-native";
 
-export default function LandingScreen() {
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+
+export default function LogInLayout() {
+  const Stack = createStackNavigator();
   return (
     <Tabs
-      initialRouteName="register"
+      initialRouteName="login"
       screenOptions={{
         tabBarActiveTintColor: "black",
         headerShown: true,

@@ -20,7 +20,7 @@ export default function TabLayout() {
     const unsubscribe = getAuth(app).onAuthStateChanged((user) => {
       setIsLoading(false);
       if (isMounted && !user) {
-        router.replace("/(landing)/login");
+        router.replace("/(login)/login");
       }
     });
 
@@ -33,6 +33,7 @@ export default function TabLayout() {
     <Tabs
       initialRouteName="index"
       screenOptions={{
+        headerTitleStyle: { fontSize: 25, fontWeight: "200" },
         headerShown: true,
         tabBarButton: HapticTab,
         tabBarStyle: Platform.select({
@@ -51,6 +52,7 @@ export default function TabLayout() {
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
           title: "Calendar",
+          headerTitle: "View Calendar",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="calendar.badge.plus" color={color} />
           ),
@@ -64,6 +66,7 @@ export default function TabLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
+
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="house.fill" color={color} />
           ),
@@ -76,6 +79,7 @@ export default function TabLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
+
           title: "Add Pet",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={80} name="plus.square.fill" color={color} />

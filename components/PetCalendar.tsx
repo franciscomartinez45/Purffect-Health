@@ -11,7 +11,7 @@ import {
   primary,
 } from "./styles/styles";
 
-interface Reminder {
+export interface Reminder {
   date: string;
   time: string;
   description: string;
@@ -41,7 +41,6 @@ export const PetCalendar = () => {
     const petsCollection = collection(db, `user/${currentUser.uid}/pets`);
     const unsubscribePets = onSnapshot(petsCollection, (petsSnapshot) => {
       const unsubscribeReminders: (() => void)[] = [];
-      const remindersData: RemindersByDate = {};
 
       petsSnapshot.forEach((petDoc) => {
         const petName = petDoc.data().name;
@@ -54,23 +53,33 @@ export const PetCalendar = () => {
         const unsubscribeReminder = onSnapshot(
           remindersCollection,
           (remindersSnapshot) => {
-            remindersSnapshot.forEach((doc) => {
-              const data = doc.data() as Reminder;
-              const date = convertDate(data.date);
-              const reminderDescription = data.description;
-              const reminderTime = data.time;
-
-              if (!remindersData[date]) {
-                remindersData[date] = [];
-              }
-              remindersData[date].push({
-                petName,
-                description: reminderDescription,
-                time: reminderTime,
+            setReminders((prevReminders) => {
+              const updatedReminders = { ...prevReminders };
+              Object.keys(updatedReminders).forEach((date) => {
+                updatedReminders[date] = updatedReminders[date].filter(
+                  (reminder) => reminder.petName !== petName
+                );
+      
+                if (updatedReminders[date].length === 0) {
+                  delete updatedReminders[date];
+                }
               });
-            });
+              remindersSnapshot.forEach((doc) => {
+                const data = doc.data() as Reminder;
+                const date = convertDate(data.date);
 
-            setReminders({ ...remindersData });
+                if (!updatedReminders[date]) {
+                  updatedReminders[date] = [];
+                }
+                updatedReminders[date].push({
+                  petName,
+                  description: data.description,
+                  time: data.time,
+                });
+              });
+
+              return updatedReminders;
+            });
           }
         );
 
@@ -124,7 +133,6 @@ export const PetCalendar = () => {
         }, {} as Record<string, { marked: boolean; dotColor: string }>)}
         onDayPress={(day: { dateString: string }) => onDayPress(day)}
       />
-
       <Modal
         transparent={true}
         visible={modalVisible}

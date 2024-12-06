@@ -21,7 +21,7 @@ import { petProfileStyle } from "../../components/styles/styles";
 import { IconSymbol } from "../../components/ui/IconSymbol";
 import { useRouter } from "expo-router";
 
-export default function AddPet() {
+export default function AddPetScreen() {
   const [petName, setPetName] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
@@ -103,50 +103,47 @@ export default function AddPet() {
             </View>
           </View>
         ) : (
-          <Text style={petProfileStyle.modalTitle}>Add New Pet</Text>
+          <Text style={petProfileStyle.modalTitle}>Create Pet Profile:</Text>
         )}
-        <Text style={profileSettings.label}>First Name</Text>
+        <Text style={profileSettings.label}>Name</Text>
         <TextInput
-          placeholder="Pet Name"
+          placeholder="e.g. Elmo, Cookie Monster, Rocco"
           value={petName}
           onChangeText={setPetName}
           style={profileSettings.input}
-          placeholderTextColor={"black"}
           returnKeyType="done"
           returnKeyLabel="Done"
+          autoCorrect={false}
+          placeholderTextColor={"#D3D3D3"}
         />
-        <Text style={profileSettings.label}>Age:</Text>
+        <Text style={profileSettings.label}>Age(Years):</Text>
         <TextInput
-          placeholder="Age"
+          placeholder="e.g. 1 ,2 ,3 ... "
           value={age}
           onChangeText={setAge}
           style={profileSettings.input}
           keyboardType="numeric"
-          placeholderTextColor={"black"}
           returnKeyType="done"
+          autoCorrect={false}
+          placeholderTextColor={"#D3D3D3"}
         />
-        <Text style={profileSettings.label}>Weight:</Text>
+        <Text style={profileSettings.label}>Weight(lbs):</Text>
         <TextInput
-          placeholder="Weight"
+          placeholder="e.g. 10, 15, 20 ... "
           value={weight}
           onChangeText={setWeight}
           style={profileSettings.input}
           keyboardType="numeric"
           returnKeyType="done"
-          placeholderTextColor={"black"}
+          autoCorrect={false}
+          placeholderTextColor={"#D3D3D3"}
         />
         <View style={petProfileStyle.buttonContainer}>
           <TouchableOpacity
             style={loginStyles.submitButton}
             onPress={pickImage}
           >
-            <Text style={loginStyles.buttonText}>
-              <IconSymbol
-                size={20}
-                name="square.and.arrow.up"
-                color={primary}
-              />
-            </Text>
+            <IconSymbol size={20} name="square.and.arrow.up" color={primary} />
           </TouchableOpacity>
 
           <TouchableOpacity

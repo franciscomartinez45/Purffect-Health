@@ -18,17 +18,18 @@ import {
   reminderStyles,
 } from "./styles/styles";
 import { IconSymbol } from "./ui/IconSymbol";
+import EditPetInfo from "./EditPetForm";
 
-interface ModalProps {
+export interface ModalProps {
   visible: boolean;
   onClose: () => void;
 }
 
 export const EditPets = (props: ModalProps) => {
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [currentPet, setPet] = useState<Pet | null>(null);
   const [pets, setReminders] = useState<Pet[]>([]);
   const { currentUser } = getAuth();
+  const [editModalVisible, setEditModalVisible] = useState<boolean>(false);
+  const [currentPet, setPet] = useState<Pet>();
 
   const getPets = () => {
     if (currentUser) {
@@ -90,15 +91,19 @@ export const EditPets = (props: ModalProps) => {
       { cancelable: true }
     );
   };
-
+  const handleOnPress = (pet: Pet) => {
+    setEditModalVisible(true);
+    setPet(pet);
+  };
+  const handleCloseModal = () => {
+    setEditModalVisible(false);
+  };
   return (
     <Modal visible={props.visible} animationType="slide" transparent>
       <View style={petProfileStyle.modalBackground}>
         <View style={petProfileStyle.modalPetProfileContainer}>
           <Text style={indexStyles.welcomeText}>Edit Your Pets</Text>
-          <Text style={indexStyles.smallText}>
-            One stop destination for your pet needs
-          </Text>
+
           <FlatList
             data={pets}
             keyExtractor={(item) => item.id}
@@ -106,9 +111,13 @@ export const EditPets = (props: ModalProps) => {
             showsVerticalScrollIndicator={true}
             nestedScrollEnabled={true}
             renderItem={({ item }) => (
-              <View style={reminderStyles.reminderItem} key={item.id}>
+              <TouchableOpacity
+                style={reminderStyles.reminderItem}
+                key={item.id}
+                onPress={() => handleOnPress(item)}
+              >
                 <Text style={reminderStyles.reminderDescription}>
-                  Name: {item.name}
+                  {item.name}
                 </Text>
                 <Text style={reminderStyles.reminderDate}>Age: {item.age}</Text>
                 <Text style={reminderStyles.reminderId}>
@@ -124,11 +133,10 @@ export const EditPets = (props: ModalProps) => {
                     color={"red"}
                   />
                 </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             )}
             style={reminderStyles.flatList}
           />
-
           <TouchableOpacity
             style={loginStyles.buttonCancel}
             onPress={props.onClose}
@@ -137,6 +145,13 @@ export const EditPets = (props: ModalProps) => {
           </TouchableOpacity>
         </View>
       </View>
+      {currentPet && (
+        <EditPetInfo
+          onClose={handleCloseModal}
+          visible={editModalVisible}
+          pet={currentPet}
+        />
+      )}
     </Modal>
   );
 };

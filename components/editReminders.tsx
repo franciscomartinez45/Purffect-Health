@@ -9,17 +9,19 @@ import {
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { getAuth } from "firebase/auth";
-import { addDoc, collection, doc } from "firebase/firestore";
-import { db } from "@/firebaseConfig";
 import { loginStyles, petProfileStyle } from "./styles/styles";
+import { Reminder } from "./Reminders";
+import { db } from "@/firebaseConfig";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 
-interface AddReminderProps {
-  petId: string;
+interface EditReminderProps {
+  reminder: Reminder;
   isVisible: boolean;
   onClose: () => void;
+  petId: string;
 }
 
-export const AddReminder = (props: AddReminderProps) => {
+export const EditReminder = (props: EditReminderProps) => {
   const { currentUser } = getAuth();
   const [dueDate, setDueDate] = useState<Date | null>(new Date());
   const [dueTime, setDueTime] = useState<Date | null>(new Date());
@@ -29,33 +31,30 @@ export const AddReminder = (props: AddReminderProps) => {
 
   const addUserData = async () => {
     if (currentUser) {
-      if (!description.trim()) {
-        Alert.alert("Missing data", "Missing a description", [{ text: "OK" }]);
-        return;
-      }
-
-      if (!dueDate || !dueTime) {
-        Alert.alert("Missing data", "Missing date or time", [{ text: "OK" }]);
-        return;
-      }
       try {
-        const reminder = {
-          description: description,
-          date: dueDate.toLocaleDateString(),
-          time: dueTime.toLocaleTimeString(),
+        const reminderUpdate = {
+          description: props.reminder.description,
+          date: props.reminder.date,
+          time: props.reminder.time,
         };
+        if (dueDate && dueDate.toLocaleDateString() !== props.reminder.date) {
+          reminderUpdate.date = dueDate.toLocaleDateString();
+        }
+        if (dueTime && dueTime.toLocaleTimeString() !== props.reminder.time) {
+          reminderUpdate.time = dueTime.toLocaleTimeString();
+        }
+        if (description && description !== props.reminder.description) {
+          reminderUpdate.description = description;
+        }
         const userRef = doc(db, "user", currentUser.uid);
         const petRef = doc(userRef, "pets", props.petId);
-        const remindersRef = collection(petRef, "reminders");
+        const reminderRef = doc(petRef, "reminders", props.reminder.id);
+        await setDoc(reminderRef, reminderUpdate, { merge: true });
 
-        await addDoc(remindersRef, reminder);
-
-        Alert.alert("Alert!", "Reminder Successfully Added!", [
+        Alert.alert("Alert!", "Reminder Successfully Saved!", [
           { text: "OK", style: "cancel" },
         ]);
-        setDescription("");
-        setDueDate(null);
-        setDueTime(null);
+        props.onClose();
       } catch (err) {
         console.error("Error adding reminder:", err);
       }
@@ -84,7 +83,6 @@ export const AddReminder = (props: AddReminderProps) => {
   const handleOnClose = () => {
     setDatePickerVisibility(false);
     setTimePickerVisibility(false);
-    setDescription("");
     setDueDate(null);
     setDueTime(null);
     props.onClose();
@@ -94,21 +92,21 @@ export const AddReminder = (props: AddReminderProps) => {
     <Modal visible={props.isVisible} animationType="slide" transparent>
       <View style={petProfileStyle.modalBackground}>
         <View style={petProfileStyle.modalContainer}>
-          <Text style={petProfileStyle.title}>Description</Text>
+          <Text style={petProfileStyle.title}>Edit Reminder</Text>
           <TextInput
             style={petProfileStyle.input}
             onChangeText={setDescription}
-            placeholder="Walk, Feed, Bathe, Vet appt, etc."
+            placeholder={props.reminder.description}
             returnKeyType="done"
-            placeholderTextColor={"#666"}
+            placeholderTextColor={"#D3D3D3"}
           />
-          {dueDate && <Text>Selected Date is:</Text>}
+          {props.reminder.date && <Text>Current Due Date is:</Text>}
           <TouchableOpacity
             style={loginStyles.addButton}
             onPress={showDatePicker}
           >
             {!dueDate ? (
-              <Text>Select Date</Text>
+              <Text>{props.reminder.date}</Text>
             ) : (
               <Text>{dueDate.toLocaleDateString()}</Text>
             )}
@@ -119,13 +117,13 @@ export const AddReminder = (props: AddReminderProps) => {
             onConfirm={handleConfirmDate}
             onCancel={() => setDatePickerVisibility(false)}
           />
-          {dueTime && <Text>Selected Time is:</Text>}
+          {props.reminder.time && <Text>Selected Time is:</Text>}
           <TouchableOpacity
             style={loginStyles.addButton}
             onPress={showTimePicker}
           >
             {!dueTime ? (
-              <Text>Select Time</Text>
+              <Text>{props.reminder.time}</Text>
             ) : (
               <Text>{dueTime.toLocaleTimeString()}</Text>
             )}
