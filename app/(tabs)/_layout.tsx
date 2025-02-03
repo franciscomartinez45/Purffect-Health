@@ -51,6 +51,7 @@ export default function TabLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
+          headerTitleAlign: "center",
           title: "Calendar",
           headerTitle: "View Calendar",
           tabBarIcon: ({ color }) => (
@@ -66,6 +67,7 @@ export default function TabLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
+          headerTitleAlign: "center",
 
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="house.fill" color={color} />
@@ -79,13 +81,14 @@ export default function TabLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
-
+          headerTitleAlign: "center",
           title: "Add Pet",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={80} name="plus.square.fill" color={color} />
           ),
         }}
       ></Tabs.Screen>
+
       <Tabs.Screen
         name="map"
         options={{
@@ -93,12 +96,14 @@ export default function TabLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
+          headerTitleAlign: "center",
           title: "Find Care",
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name="mappin.and.ellipse" color={color} />
           ),
         }}
       />
+
       <Tabs.Screen
         name="profile"
         options={{
@@ -107,6 +112,7 @@ export default function TabLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
+          headerTitleAlign: "center",
           tabBarIcon: ({ color }) => (
             <IconSymbol
               size={28}

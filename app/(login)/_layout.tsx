@@ -35,6 +35,7 @@ export default function LogInLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
+          headerTitleAlign: "center",
           title: "Register",
           tabBarIcon: ({ color }) => (
             <IconSymbol name="square.fill" color={color} />
@@ -49,6 +50,7 @@ export default function LogInLayout() {
           tabBarStyle: { backgroundColor: headerBackground },
           tabBarActiveTintColor: buttonPrimary,
           headerTintColor: buttonPrimary,
+          headerTitleAlign: "center",
           title: "Log In",
           tabBarIcon: ({ color }) => (
             <IconSymbol name="circle.fill" color={color} />

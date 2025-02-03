@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 export const primary = "#ffffff";
 export const textColor = "#F4F0DB";
 export const buttonPrimary = "#444444";
@@ -20,6 +20,8 @@ export const showPetsStyle = StyleSheet.create({
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",
+    borderColor: "black",
+    borderWidth: 1,
   },
   imageProfile: {
     width: "100%",
@@ -316,51 +318,12 @@ export const calendarModalStyle = StyleSheet.create({
   },
 });
 export const mapStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height * 0.5,
-  },
-  list: {
     flex: 1,
-    backgroundColor: "#fff",
-  },
-  resultItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-  },
-
-  calloutContainer: {
-    padding: 10,
-    width: 200,
     alignItems: "center",
-  },
-  calloutTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  calloutText: {
-    fontSize: 14,
-    marginVertical: 5,
-  },
-  directionsButton: {
-    backgroundColor: "#007aff",
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  directionsButtonText: {
-    color: "#fff",
-    fontSize: 16,
-  },
-
-  loadingContainer: {
-    flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    width: 500,
+    height: 900,
   },
 });
 export const loginStyles = StyleSheet.create({
@@ -518,5 +481,76 @@ export const profileSettings = StyleSheet.create({
     color: "#333",
     marginBottom: 10,
     backgroundColor: "#F9F9F9",
+  },
+});
+export const locationsStyle = StyleSheet.create({
+  remindersListContent: {
+    padding: 10,
+  },
+  itemContainer: {
+    marginBottom: 15,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  icon: {
+    width: 30,
+    height: 30,
+    marginBottom: 10,
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  status: {
+    fontSize: 14,
+    color: "#666",
+    marginVertical: 4,
+  },
+  vicinity: {
+    fontSize: 14,
+    color: "#555",
+    marginVertical: 4,
+  },
+  openingHours: {
+    fontSize: 14,
+    color: "#008000",
+    marginVertical: 4,
+  },
+  closedHours: {
+    fontSize: 14,
+    color: "red",
+    marginVertical: 4,
+  },
+  types: {
+    fontSize: 14,
+    color: "#555",
+    marginVertical: 4,
+  },
+  plusCode: {
+    fontSize: 14,
+    color: "#555",
+    marginVertical: 4,
+  },
+  reference: {
+    fontSize: 14,
+    color: "#555",
+    marginVertical: 4,
+  },
+  placeId: {
+    fontSize: 14,
+    color: "#888",
+    marginVertical: 4,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: "#e0e0e0",
+    marginTop: 10,
   },
 });

@@ -5,12 +5,13 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "myapp",
-    "platforms": ["android", "ios"],
+    "platforms": ["android", "ios", "web"],
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"]
+        "UIBackgroundModes": ["remote-notification", "remote-notification"],
+        "ITSAppUsesNonExemptEncryption": false
       },
       "supportsTablet": true,
       "config": {
@@ -57,7 +58,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "f6ee159e-e1c8-4ffd-87fb-28790182c255"
+        "projectId": "be7968d0-fd3d-4c84-9e3f-89b77a8a45c9"
       }
     },
     "owner": "fmartinez110"

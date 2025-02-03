@@ -2,7 +2,7 @@ import { db } from "@/firebaseConfig";
 import { getAuth } from "firebase/auth";
 import { collection, doc, deleteDoc, onSnapshot } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { FlatList, View, Text, TouchableOpacity, Alert } from "react-native";
+import { FlatList, Text, TouchableOpacity, Alert } from "react-native";
 import { reminderStyles } from "./styles/styles";
 import { IconSymbol } from "./ui/IconSymbol";
 import { EditReminder } from "./editReminders";
@@ -12,7 +12,6 @@ export interface Reminder {
   id: string;
   date: string;
   time: string;
-  dateTime: Date;
 }
 
 interface PetRemindersProp {
@@ -32,21 +31,18 @@ export const PetReminders = (props: PetRemindersProp) => {
         const unsubscribe = onSnapshot(remindersRef, (snapshot) => {
           const remindersList: Reminder[] = snapshot.docs.map((doc) => {
             const data = doc.data();
-            const combinedDateTime = new Date(`${data.date} ${data.time}`);
+
             return {
               id: doc.id,
               description: data.description,
               date: data.date,
               time: data.time,
-              dateTime: combinedDateTime,
             };
           });
 
-          // Sort by the combined date and time
-          const sortedReminders = remindersList.sort(
-            (a, b) => a.dateTime.getTime() - b.dateTime.getTime()
-          );
-
+          const sortedReminders = remindersList.sort((a, b) => {
+            return a.date.toString().localeCompare(b.date.toString());
+          });
           setReminders(sortedReminders);
         });
 

@@ -6,6 +6,7 @@ import {
   Alert,
   Image,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import {
   loginStyles,
@@ -143,7 +144,16 @@ export default function AddPetScreen() {
             style={loginStyles.submitButton}
             onPress={pickImage}
           >
-            <IconSymbol size={20} name="square.and.arrow.up" color={primary} />
+            {Platform.OS === "ios" && (
+              <IconSymbol
+                size={20}
+                name="square.and.arrow.up"
+                color={primary}
+              />
+            )}
+            {Platform.OS === "web" && (
+              <Text style={loginStyles.buttonText}>Pick Image</Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity

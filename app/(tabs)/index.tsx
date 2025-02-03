@@ -8,7 +8,6 @@ import {
   collection,
   doc,
   getDoc,
-  getDocs,
   onSnapshot,
 } from "firebase/firestore";
 import { EditPets } from "@/components/editPetModal";
