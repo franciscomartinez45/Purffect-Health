@@ -9,13 +9,13 @@ import { Platform } from "react-native";
 import ReactNativePersistance from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBn8evBTGXMpcnr21tk4tvevTffhYUADfM",
-  authDomain: "purrfect-health.firebaseapp.com",
-  projectId: "purrfect-health",
-  storageBucket: "purrfect-health.appspot.com",
-  messagingSenderId: "761370362351",
-  appId: "1:761370362351:web:3dbaef5cd072fb13b5b61a",
-  measurementId: "G-W837PDNW1P",
+  apiKey: process.env.EXPO_PUBLIC_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_APP_ID,
+  measurementId: process.env.EXPO_PUBLIC_MEASUREMENT_ID,
 };
 
 export const app = initializeApp(firebaseConfig);
